@@ -1,0 +1,48 @@
+/* Breakpoints */
+@media (max-width: 1200px) {
+  :root {
+    --spacing-xl: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-xl: 1.1rem;
+    --spacing-xl: 1rem;
+  }
+
+  body {
+    font-size: 0.95rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --spacing-lg: 1rem;
+    --spacing-md: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+}
