@@ -3,8 +3,13 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'products',
+    redirectTo: 'home',
     pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./features/home/home.component')
+      .then(m => m.HomeComponent)
   },
   {
     path: 'products',
@@ -26,19 +31,18 @@ export const routes: Routes = [
     loadChildren: () => import('./features/admin/admin.routes')
       .then(m => m.ADMIN_ROUTES)
   },
-   {
+  {
     path: 'register',
     loadComponent: () => import('./features/auth/pages/register/register.component')
       .then(m => m.RegisterComponent)
   },
   {
-    path: 'admin',
-    loadChildren: () => import('./features/admin/admin.routes')
-      .then(m => m.ADMIN_ROUTES)
+    path: 'recomendador',
+    loadComponent: () => import('./features/recomendador/recomendador.component')
+      .then(m => m.RecomendadorComponent)
   },
   {
     path: '**',
-    redirectTo: 'products'
-  },
-
+    redirectTo: 'home'
+  }
 ];

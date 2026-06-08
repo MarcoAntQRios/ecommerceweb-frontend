@@ -18,10 +18,10 @@ import { takeUntil } from 'rxjs/operators';
           <h1>🛒 E-Commerce</h1>
         </div>
 
-        <nav class="nav">
-          <a routerLink="/products" routerLinkActive="active" class="nav-link">Productos</a>
-        </nav>
-
+       <nav class="nav">
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Home</a>
+  <a routerLink="/products" routerLinkActive="active" class="nav-link">Productos</a>
+</nav>
         <div class="actions-section">
           <p-button
   label="Registrarse"

@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
         <div class="menu-section">
           <h3>📦 Productos</h3>
           <a routerLink="/products" routerLinkActive="active" class="menu-item">
-            <i class="pi pi-list"></i> Listar Productos
+            <i class="pi pi-list"></i> Catalogo Productos
           </a>
         </div>
 
