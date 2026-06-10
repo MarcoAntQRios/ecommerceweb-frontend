@@ -1,0 +1,44 @@
+<div class="products-container">
+      <h2>📦 Catálogo de Productos</h2>
+
+      <div *ngIf="loading" class="loading">Cargando productos...</div>
+
+      <div class="products-grid">
+        <div *ngFor="let product of products" class="product-card">
+
+          <div class="stock-badge" [ngClass]="{
+            'sin-stock': product.stock === 0,
+            'poco-stock': product.stock > 0 && product.stock < 5,
+            'en-stock': product.stock >= 5
+          }">
+            {{ product.stock === 0 ? 'Sin stock' : product.stock < 5 ? 'Últimas unidades' : 'En stock' }}
+          </div>
+
+          <a [routerLink]="['/products', product.id]">
+            <img [src]="product.imagen" [alt]="product.nombre" class="product-image"
+              (error)="onImageError($event)" />
+          </a>
+
+          <div class="product-info">
+            <h3>{{ product.nombre }}</h3>
+            <p class="description">{{ product.descripcion }}</p>
+
+            <div class="price-section">
+              <span class="price">S/ {{ product.precio   }}</span>
+              <span class="stock-text">
+                {{ product.stock === 0 ? 'Sin stock' : product.stock < 5 ? 'Últimas unidades' : 'Disponible' }}
+              </span>
+            </div>
+
+            <div class="buttons-section">
+              <p-button
+                label="Agregar al Carrito"
+                icon="pi pi-shopping-cart"
+                (click)="addToCart(product)"
+                [disabled]="product.stock === 0">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

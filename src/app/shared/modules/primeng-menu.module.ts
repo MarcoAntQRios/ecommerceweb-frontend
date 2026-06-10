@@ -15,7 +15,6 @@ import { BadgeModule } from 'primeng/badge';
     MenuModule,
 
     BadgeModule
-
   ]
 
 })

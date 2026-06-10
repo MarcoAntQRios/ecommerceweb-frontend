@@ -14,7 +14,7 @@ export class CartService {
   public cart$ = this.cartSubject.asObservable();
 
   constructor() {
-    // Cargar carrito del localStorage si existe
+    // Cargar carrito del localStorage si existe, en lugar de localstorage tiene que ser de la BD
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       this.cartSubject.next(JSON.parse(savedCart));

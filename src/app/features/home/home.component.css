@@ -1,0 +1,251 @@
+/* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a7a4a 0%, #2ecc71 100%);
+      padding: 5rem 2rem;
+      text-align: center;
+      color: white;
+    }
+    .hero-content {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .hero-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.2;
+      color: white;
+    }
+    .highlight { color: #d4f5e2; }
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      max-width: 500px;
+      margin: 0;
+    }
+
+    /* SELECTOR */
+    .selector-section {
+      background: white;
+      padding: 0 2rem;
+      margin-top: -2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .selector-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+    .selector-left { display: flex; align-items: center; gap: 1rem; }
+    .selector-icon {
+      font-size: 2rem;
+      background: #d4f5e2;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .selector-left h3 { margin: 0 0 0.25rem; color: #333; font-size: 1.1rem; }
+    .selector-left p { margin: 0; color: #666; font-size: 0.85rem; }
+    .selector-right { display: flex; align-items: center; }
+    .btn-ingresar {
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 10px;
+      background: #2ecc71;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ingresar:hover { background: #1a7a4a; }
+
+    /* CÓMO FUNCIONA */
+    .como-funciona {
+      background: #f8fffe;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .section-container { max-width: 960px; margin: 0 auto; }
+    .section-badge {
+      background: #d4f5e2;
+      color: #1a7a4a;
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .section-container h2 {
+      font-size: 2rem;
+      color: #1a7a4a;
+      margin: 1rem 0 0.5rem;
+    }
+    .section-subtitle { color: #666; margin-bottom: 2.5rem; }
+
+    /* CARRUSEL */
+  .carousel-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.carousel-viewport {
+  flex: 1;
+  overflow: hidden;
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 300%;
+}
+.carousel-slide {
+  flex: 0 0 33.333%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.25rem;
+}
+    .step-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      text-align: center;
+      box-sizing: border-box;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .step-icon-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.6rem;
+    }
+    .ci-blue   { background: #dbeafe; }
+    .ci-purple { background: #ede9fe; }
+    .ci-amber  { background: #fef3c7; }
+    .ci-green  { background: #d1fae5; }
+    .ci-coral  { background: #fee2e2; }
+    .ci-teal   { background: #ccfbf1; }
+    .step-emoji { font-size: 1.8rem; }
+    .step-card h3 { color: #1a7a4a; margin: 0 0 0.5rem; font-size: 1rem; }
+    .step-card p  { color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5; }
+
+    /* BOTONES */
+    .carousel-btn {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 2px solid #2ecc71;
+      background: white;
+      color: #2ecc71;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-btn:hover:not(:disabled) { background: #2ecc71; color: white; }
+    .carousel-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* DOTS */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c8eada;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dot.active { background: #2ecc71; transform: scale(1.3); }
+
+    /* FAQ */
+    .faq {
+      background: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .faq-list {
+      text-align: left;
+      margin: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .faq-item {
+      border: 1px solid #e0f5ec;
+      border-radius: 8px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .faq-item:hover { background: #f8fffe; }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: #333;
+    }
+    .faq-question i { color: #2ecc71; }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, margin-top 0.2s ease;
+      margin-top: 0;
+    }
+    .faq-answer.open {
+      max-height: 300px;
+      margin-top: 0.75rem;
+    }
+    .faq-answer p {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .selector-card { flex-direction: column; }
+      .selector-right { width: 100%; }
+      .btn-ingresar { width: 100%; }
+      .carousel-slide { grid-template-columns: 1fr; }
+    }

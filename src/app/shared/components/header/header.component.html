@@ -1,0 +1,68 @@
+<header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <h1>🛒 E-Commerce</h1>
+        </div>
+        <nav class="nav">
+          <p-megamenu [model]="megaMenuItems" styleClass="custom-megamenu" />
+        </nav>
+        <div class="actions-section">
+          <div class="user-menu-wrapper">
+            <p-button
+              label="Mi cuenta"
+              icon="pi pi-user"
+              [text]="true"
+              severity="secondary"
+              (click)="userMenu.toggle($event)">
+            </p-button>
+            <p-menu #userMenu [model]="userMenuItems" [popup]="true" />
+          </div>
+
+          <p-button
+            icon="pi pi-shopping-cart"
+            [rounded]="true"
+            [text]="true"
+            (click)="showCart()"
+            [badge]="((cart$ | async)?.itemCount ?? 0).toString()"
+            badgeStyleClass="p-badge-danger">
+          </p-button>
+        </div>
+      </div>
+    </header>
+
+    <p-drawer
+      [(visible)]="sidebarVisible"
+      position="right"
+      styleClass="cart-sidebar"
+      [modal]="true"
+      [showCloseIcon]="true">
+      <ng-template pTemplate="header">
+        <h3>🛒 Carrito ({{ (cart$ | async)?.itemCount }} items)</h3>
+      </ng-template>
+
+      <div class="cart-items-container">
+        <div *ngIf="((cart$ | async)?.items?.length ?? 0) === 0" class="empty-cart">
+          <p>Tu carrito está vacío</p>
+        </div>
+        <div *ngFor="let item of (cart$ | async)?.items" class="cart-item">
+          <img [src]="item.product.imagen" [alt]="item.product.nombre" />
+          <div class="item-details">
+            <p class="item-name">{{ item.product.nombre }}</p>
+            <p class="item-price">S/ {{ item.product.precio }}</p>
+            <div class="quantity-controls">
+              <button (click)="decreaseQuantity(item.product.id)">-</button>
+              <span>{{ item.quantity }}</span>
+              <button (click)="increaseQuantity(item.product.id)">+</button>
+            </div>
+          </div>
+          <button class="remove-btn" (click)="removeItem(item.product.id)">×</button>
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer" *ngIf="((cart$ | async)?.items?.length ?? 0) > 0">
+        <div class="cart-footer">
+          <p class="total">Total: S/ {{ (cart$ | async)?.total }}</p>
+          <p-button label="Checkout" icon="pi pi-check" class="w-full" (click)="goToCheckout()"></p-button>
+        </div>
+      </ng-template>
+    </p-drawer>

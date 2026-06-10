@@ -1,0 +1,45 @@
+<div class="register-container">
+      <div class="register-card">
+        <h2>🛒 Crear Cuenta</h2>
+        <p class="subtitle">Únete y empieza a comprar</p>
+
+        <div class="form-group">
+          <label>Nombre:</label>
+          <input type="text" [(ngModel)]="usuario.nombre" class="form-control" placeholder="Tu nombre" />
+        </div>
+        <div class="form-group">
+          <label>Apellido:</label>
+          <input type="text" [(ngModel)]="usuario.apellido" class="form-control" placeholder="Tu apellido" />
+        </div>
+        <div class="form-group">
+          <label>Correo:</label>
+          <input type="email" [(ngModel)]="usuario.correo" class="form-control" placeholder="correo@ejemplo.com" />
+        </div>
+        <div class="form-group">
+          <label>Contraseña:</label>
+          <input type="password" [(ngModel)]="usuario.password" class="form-control" placeholder="••••••••" />
+        </div>
+        <div class="form-group">
+          <label>Teléfono:</label>
+          <input type="text" [(ngModel)]="usuario.telefono" class="form-control" placeholder="999 999 999" />
+        </div>
+        <div class="form-group">
+          <label>Dirección:</label>
+          <input type="text" [(ngModel)]="usuario.direccion" class="form-control" placeholder="Tu dirección" />
+        </div>
+
+        <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+        <div *ngIf="successMsg" class="success-msg">{{ successMsg }}</div>
+
+        <div class="form-footer">
+          <p-button 
+            label="Registrarse" 
+            icon="pi pi-user-plus" 
+            [loading]="loading"
+            (click)="register()">
+          </p-button>
+        </div>
+
+        
+      </div>
+    </div>

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../core/services/cart.service';
-import { ApiService } from '../../../core/services/api.service';
+import { VentaService } from '../../../core/services/venta.service';
 import { PrimeNgButtonModule } from '../../../shared/modules/primeng-button.module';
 import { Router } from '@angular/router';
 
@@ -127,7 +127,7 @@ export class CheckoutPageComponent {
 
   constructor(
     private cartService: CartService,
-    private apiService: ApiService,
+    private ventaService: VentaService,
     private router: Router
   ) {
     this.cart$ = this.cartService.cart$;
@@ -148,7 +148,7 @@ export class CheckoutPageComponent {
       status: 'pending'
     };
 
-this.apiService.createVenta(order as any).subscribe({
+this.ventaService.createVenta(order as any).subscribe({
           next: () => {
         this.loading = false;
         this.cartService.clearCart();

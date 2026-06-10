@@ -7,5 +7,7 @@ export interface IProduct {
   imagen: string;
   tipoNombre: string;
   tipoId?: number; 
+  categoriaId?: number;
+  categoriaNombre: string;
 }
 

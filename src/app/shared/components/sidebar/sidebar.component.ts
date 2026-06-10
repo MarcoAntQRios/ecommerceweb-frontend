@@ -9,13 +9,7 @@ import { RouterModule } from '@angular/router';
   template: `
     <aside class="sidebar">
       <nav class="menu">
-        <div class="menu-section">
-          <h3>📦 Productos</h3>
-          <a routerLink="/products" routerLinkActive="active" class="menu-item">
-            <i class="pi pi-list"></i> Catalogo Productos
-          </a>
-        </div>
-
+        
         <div class="menu-section">
           <h3>⚙️ Administración</h3>
           <a routerLink="/admin/products" routerLinkActive="active" class="menu-item">

@@ -1,0 +1,105 @@
+ <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="hero-badge">⚡ Tecnología al mejor precio</span>
+        <h1>Encuentra el equipo<br><span class="highlight">perfecto para ti</span></h1>
+        <p>Te ofrecemos los mejores productos tecnológicos con garantía, stock disponible y precios competitivos.</p>
+      </div>
+    </section>
+
+    <!-- SELECTOR -->
+    <section class="selector-section">
+      <div class="selector-card">
+        <div class="selector-left">
+          <div class="selector-icon">🔍</div>
+          <div>
+            <h3>¿Necesitas una PC o una laptop?</h3>
+            <p>Te ayudamos a encontrar la mejor opción</p>
+          </div>
+        </div>
+        <div class="selector-right">
+          <button class="btn-ingresar" (click)="irAlRecomendador()">Ingresar →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="como-funciona">
+      <div class="section-container">
+        <span class="section-badge">Informacion</span>
+        <h2>Encuentra el equipo ideal para ti</h2>
+        <p class="section-subtitle">Aprende sobre componentes, rendimiento y presupuesto antes de comprar.</p>
+
+        <div class="carousel-wrapper">
+          <button class="carousel-btn" (click)="prevStep()" [disabled]="currentStep === 0">‹</button>
+
+          <div class="carousel-viewport">
+<div class="carousel-track" [style.transform]="'translateX(-' + (currentStep * 33.333) + '%)'">
+
+              <!-- Grupo 1 -->
+              <div class="carousel-slide">
+                <div class="step-card" *ngFor="let step of stepsGroup1">
+                  <div class="step-icon-wrap" [ngClass]="step.color">
+                    <span class="step-emoji">{{ step.icon }}</span>
+                  </div>
+                  <h3>{{ step.titulo }}</h3>
+                  <p>{{ step.descripcion }}</p>
+                </div>
+              </div>
+
+              <!-- Grupo 2 -->
+              <div class="carousel-slide">
+                <div class="step-card" *ngFor="let step of stepsGroup2">
+                  <div class="step-icon-wrap" [ngClass]="step.color">
+                    <span class="step-emoji">{{ step.icon }}</span>
+                  </div>
+                  <h3>{{ step.titulo }}</h3>
+                  <p>{{ step.descripcion }}</p>
+                </div>
+              </div>
+
+              <!-- Grupo 3 -->
+              <div class="carousel-slide">
+                <div class="step-card" *ngFor="let step of stepsGroup3">
+                  <div class="step-icon-wrap" [ngClass]="step.color">
+                    <span class="step-emoji">{{ step.icon }}</span>
+                  </div>
+                  <h3>{{ step.titulo }}</h3>
+                  <p>{{ step.descripcion }}</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <button class="carousel-btn" (click)="nextStep()" [disabled]="currentStep === 2">›</button>
+        </div>
+
+        <div class="carousel-dots">
+          <span class="dot" [class.active]="currentStep === 0" (click)="goToStep(0)"></span>
+          <span class="dot" [class.active]="currentStep === 1" (click)="goToStep(1)"></span>
+          <span class="dot" [class.active]="currentStep === 2" (click)="goToStep(2)"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+      <div class="section-container">
+        <span class="section-badge">Preguntas frecuentes</span>
+        <h2>Todo lo que necesitas saber</h2>
+        <p class="section-subtitle">Respuestas rápidas a las dudas más comunes.</p>
+
+        <div class="faq-list">
+          <div *ngFor="let item of faqs; let i = index" class="faq-item" (click)="toggleFaq(i)">
+            <div class="faq-question">
+              <span>{{ item.pregunta }}</span>
+              <i class="pi" [ngClass]="openFaqIndex === i ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+            </div>
+            <div class="faq-answer" [class.open]="openFaqIndex === i">
+              <p>{{ item.respuesta }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

@@ -1,0 +1,97 @@
+<div class="products-admin">
+      <h2>Gestión de Productos</h2>
+
+      <p-button label="Nuevo Producto" icon="pi pi-plus" (click)="openDialog()" class="mb-3"></p-button>
+
+      <p-table [value]="products" [rows]="10" [paginator]="true" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+            <th pSortableColumn="descripcion">Descripción <p-sortIcon field="descripcion"></p-sortIcon></th>
+            <th pSortableColumn="precio">Precio <p-sortIcon field="precio"></p-sortIcon></th>
+            <th pSortableColumn="stock">Stock <p-sortIcon field="stock"></p-sortIcon></th>
+            <th pSortableColumn="tipoNombre">Tipo <p-sortIcon field="tipoNombre"></p-sortIcon></th>
+            <th pSortableColumn="categoriaNombre">Categoría <p-sortIcon field="categoriaNombre"></p-sortIcon></th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.nombre }}</td>
+            <td>{{ product.descripcion }}</td>
+            <td>S/ {{ product.precio }}</td>
+            <td>{{ product.stock }}</td>
+            <td>{{ product.tipoNombre }}</td>
+            <td>{{ product.categoriaNombre }}</td>
+            <td>
+              <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (click)="editProduct(product)"></p-button>
+              <p-button icon="pi pi-box" [rounded]="true" [text]="true" severity="warn" (click)="openStockDialog(product)"></p-button>
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (click)="deleteProduct(product.id)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!-- Dialog Crear/Editar -->
+      <p-dialog [(visible)]="displayDialog" [header]="dialogTitle" [modal]="true" [style]="{width: '50vw'}">
+        <div class="form-group">
+          <label>Nombre:</label>
+          <input type="text" [(ngModel)]="selectedProduct.nombre" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Descripción:</label>
+          <textarea [(ngModel)]="selectedProduct.descripcion" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Precio:</label>
+          <input type="number" [(ngModel)]="selectedProduct.precio" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Imagen (URL):</label>
+          <input type="text" [(ngModel)]="selectedProduct.imagen" class="form-control" placeholder="https://..." />
+          <img *ngIf="selectedProduct.imagen" [src]="selectedProduct.imagen" class="preview-img" />
+        </div>
+        <div class="form-group" *ngIf="!isEditMode">
+          <label>Stock inicial:</label>
+          <input type="number" [(ngModel)]="selectedProduct.stock" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Categoría:</label>
+          <select [(ngModel)]="selectedProduct.categoriaId" class="form-control"
+            (ngModelChange)="onCategoriaChange()">
+            <option [ngValue]="null" disabled>Selecciona una categoría</option>
+            <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo:</label>
+          <select [(ngModel)]="selectedProduct.tipoId" class="form-control"
+            [disabled]="!selectedProduct.categoriaId">
+            <option [ngValue]="null" disabled>
+              {{ selectedProduct.categoriaId ? 'Selecciona un tipo' : 'Primero selecciona una categoría' }}
+            </option>
+            <option *ngFor="let tipo of tiposFiltrados" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+          </select>
+        </div>
+        <div class="dialog-footer">
+          <p-button label="Cancelar" [text]="true" severity="secondary" (click)="displayDialog = false"></p-button>
+          <p-button label="Guardar" icon="pi pi-check" (click)="saveProduct()"></p-button>
+        </div>
+      </p-dialog>
+
+      <!-- Dialog Stock -->
+      <p-dialog [(visible)]="displayStockDialog" header="Actualizar Stock" [modal]="true" [style]="{width: '30vw'}">
+        <p>Producto: <strong>{{ selectedProduct.nombre }}</strong></p>
+        <p>Stock actual: <strong>{{ selectedProduct.stock }}</strong></p>
+        <div class="form-group" style="margin-top: 1rem">
+          <label>Nuevo Stock:</label>
+          <input type="number" [(ngModel)]="nuevoStock" class="form-control" />
+        </div>
+        <div class="dialog-footer">
+          <p-button label="Cancelar" [text]="true" severity="secondary" (click)="displayStockDialog = false"></p-button>
+          <p-button label="Actualizar" icon="pi pi-check" severity="warn" (click)="saveStock()"></p-button>
+        </div>
+      </p-dialog>
+    </div>

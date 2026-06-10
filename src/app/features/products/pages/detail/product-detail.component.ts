@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ApiService } from '../../../../core/services/api.service';
+import { ProductService } from '../../../../core/services/product.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { PrimeNgButtonModule } from '../../../../shared/modules/primeng-button.module';
 import { Subject } from 'rxjs';
@@ -174,7 +174,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService,
+    private productService: ProductService,
     private cartService: CartService
   ) { }
 
@@ -193,7 +193,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   loadProduct(id: number): void {
     this.loading = true;
-    this.apiService.getProductById(id)
+    this.productService.getProductById(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (product) => {

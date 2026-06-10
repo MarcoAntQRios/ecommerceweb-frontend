@@ -1,0 +1,10 @@
+ .orders-admin { max-width: 1200px; padding: 1rem; }
+    h2 { margin-bottom: 1.5rem; }
+    .estado-pendiente { background: #fff3cd; color: #856404; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
+    .estado-procesado { background: #d1e7dd; color: #0f5132; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
+    .estado-cancelado { background: #f8d7da; color: #842029; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
+    .venta-detail p { margin: 0.5rem 0; color: #555; }
+    .detalle-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    .detalle-table th { background: #f8f9fa; padding: 0.75rem; text-align: left; border-bottom: 2px solid #ddd; }
+    .detalle-table td { padding: 0.75rem; border-bottom: 1px solid #eee; }
+    .dialog-footer { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
