@@ -1,45 +1,129 @@
-<div class="register-container">
-      <div class="register-card">
-        <h2>🛒 Crear Cuenta</h2>
-        <p class="subtitle">Únete y empieza a comprar</p>
+<div class="auth-page">
+  <div class="auth-card">
 
-        <div class="form-group">
-          <label>Nombre:</label>
-          <input type="text" [(ngModel)]="usuario.nombre" class="form-control" placeholder="Tu nombre" />
-        </div>
-        <div class="form-group">
-          <label>Apellido:</label>
-          <input type="text" [(ngModel)]="usuario.apellido" class="form-control" placeholder="Tu apellido" />
-        </div>
-        <div class="form-group">
-          <label>Correo:</label>
-          <input type="email" [(ngModel)]="usuario.correo" class="form-control" placeholder="correo@ejemplo.com" />
-        </div>
-        <div class="form-group">
-          <label>Contraseña:</label>
-          <input type="password" [(ngModel)]="usuario.password" class="form-control" placeholder="••••••••" />
-        </div>
-        <div class="form-group">
-          <label>Teléfono:</label>
-          <input type="text" [(ngModel)]="usuario.telefono" class="form-control" placeholder="999 999 999" />
-        </div>
-        <div class="form-group">
-          <label>Dirección:</label>
-          <input type="text" [(ngModel)]="usuario.direccion" class="form-control" placeholder="Tu dirección" />
+    <!-- Panel de marca (igual estilo que el login) -->
+    <div class="brand-panel">
+      <div class="brand-decor brand-decor--top"></div>
+      <div class="brand-decor brand-decor--bottom"></div>
+
+      <div class="brand-content">
+        <div class="brand-logo">
+          <i class="pi pi-shopping-bag"></i>
+          <span>ProducTec</span>
         </div>
 
-        <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
-        <div *ngIf="successMsg" class="success-msg">{{ successMsg }}</div>
+        <h1 class="brand-title">Tu tienda de<br />tecnología</h1>
+        <p class="brand-text">
+          Encuentra los mejores productos al mejor precio, con envío rápido y seguro.
+        </p>
 
-        <div class="form-footer">
-          <p-button 
-            label="Registrarse" 
-            icon="pi pi-user-plus" 
-            [loading]="loading"
-            (click)="register()">
-          </p-button>
-        </div>
-
-        
+        <ul class="brand-features">
+          <li>
+            <span class="feature-icon"><i class="pi pi-shield"></i></span>
+            Compra segura
+          </li>
+          <li>
+            <span class="feature-icon"><i class="pi pi-truck"></i></span>
+            Envío rápido
+          </li>
+          <li>
+            <span class="feature-icon"><i class="pi pi-star"></i></span>
+            Mejores precios
+          </li>
+        </ul>
       </div>
     </div>
+
+    <!-- Panel del formulario -->
+    <div class="form-panel">
+      <h2 class="form-title">Crear cuenta</h2>
+      <p class="form-subtitle">Completa tus datos para empezar a comprar</p>
+
+      <div class="field-row">
+        <div class="form-group">
+          <label>Nombre</label>
+          <div class="input-wrap">
+            <i class="pi pi-user"></i>
+            <input type="text" [(ngModel)]="usuario.nombre" placeholder="Tu nombre" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Apellido</label>
+          <div class="input-wrap">
+            <i class="pi pi-user"></i>
+            <input type="text" [(ngModel)]="usuario.apellido" placeholder="Tu apellido" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <div class="input-wrap">
+          <i class="pi pi-envelope"></i>
+          <input type="email" [(ngModel)]="usuario.correo" placeholder="correo@ejemplo.com" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="input-wrap">
+          <i class="pi pi-lock"></i>
+          <input
+            [type]="passwordVisible ? 'text' : 'password'"
+            [(ngModel)]="usuario.password"
+            placeholder="••••••••"
+          />
+          <button
+            type="button"
+            class="toggle-visibility"
+            (click)="togglePassword()"
+            tabindex="-1"
+            aria-label="Mostrar u ocultar contraseña"
+          >
+            <i class="pi" [ngClass]="passwordVisible ? 'pi-eye-slash' : 'pi-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="form-group">
+          <label>Teléfono</label>
+          <div class="input-wrap">
+            <i class="pi pi-phone"></i>
+            <input type="text" [(ngModel)]="usuario.telefono" placeholder="999 999 999" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Dirección</label>
+          <div class="input-wrap">
+            <i class="pi pi-map-marker"></i>
+            <input type="text" [(ngModel)]="usuario.direccion" placeholder="Tu dirección" />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="errorMsg" class="alert alert-error">{{ errorMsg }}</div>
+      <div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+      <div class="form-footer">
+        <p-button
+  label="Registrarse"
+  icon="pi pi-user-plus"
+  [loading]="loading"
+  (click)="register()"
+  styleClass="w-full"
+>
+</p-button>
+      </div>
+
+      <p class="switch-text">¿Ya tienes cuenta?</p>
+      <button type="button" class="ghost-btn" (click)="goToLogin()">
+        <i class="pi pi-sign-in"></i>
+        Iniciar sesión
+      </button>
+    </div>
+
+  </div>
+</div>

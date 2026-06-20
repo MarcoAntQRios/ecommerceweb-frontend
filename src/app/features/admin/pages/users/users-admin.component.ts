@@ -46,6 +46,7 @@ export class UsersAdminComponent implements OnInit, OnDestroy {
       correo: usuario.correo,
       telefono: usuario.telefono,
       direccion: usuario.direccion,
+      rolId: usuario.rolId 
     };
     this.displayDialog = true;
   }

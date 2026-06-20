@@ -1,10 +1,85 @@
- .orders-admin { max-width: 1200px; padding: 1rem; }
-    h2 { margin-bottom: 1.5rem; }
-    .estado-pendiente { background: #fff3cd; color: #856404; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
-    .estado-procesado { background: #d1e7dd; color: #0f5132; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
-    .estado-cancelado { background: #f8d7da; color: #842029; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
-    .venta-detail p { margin: 0.5rem 0; color: #555; }
-    .detalle-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-    .detalle-table th { background: #f8f9fa; padding: 0.75rem; text-align: left; border-bottom: 2px solid #ddd; }
-    .detalle-table td { padding: 0.75rem; border-bottom: 1px solid #eee; }
-    .dialog-footer { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+
+.orders-admin { max-width: 1200px; padding: 1rem; }
+h2 { margin-bottom: 1.5rem; }
+.estado-pendiente { background: #fff3cd; color: #856404; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
+.estado-procesado { background: #d1e7dd; color: #0f5132; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
+.estado-cancelado { background: #f8d7da; color: #842029; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; }
+
+/* DETALLE MEJORADO */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.order-id { font-size: 1.1rem; font-weight: 700; color: #111; margin: 0 0 0.25rem; }
+.order-date { font-size: 0.85rem; color: #6b7280; margin: 0; }
+.badge-estado {
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.badge-pendiente { background: #fff3cd; color: #856404; }
+.badge-procesado { background: #d1fae5; color: #065f46; }
+.badge-cancelado { background: #fee2e2; color: #991b1b; }
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.meta-card {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+}
+.meta-label { font-size: 0.7rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.meta-value { font-size: 0.95rem; font-weight: 600; color: #111; }
+
+.products-title { font-size: 0.85rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 0.75rem; }
+
+.detalle-table { width: 100%; border-collapse: collapse; }
+.detalle-table th {
+  background: #f1f5f9;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e5e7eb;
+}
+.detalle-table td {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  color: #374151;
+  border-bottom: 1px solid #f1f5f9;
+}
+.detalle-table tr:last-child td { border-bottom: none; }
+.product-name { font-weight: 600; color: #111; }
+.qty-badge {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: #164cd5;
+  border-radius: 8px;
+  color: white;
+}
+.total-label { font-size: 0.9rem; font-weight: 600; }
+.total-amount { font-size: 1.1rem; font-weight: 700; }

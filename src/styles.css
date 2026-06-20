@@ -3,7 +3,19 @@
 /* src/styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+ 
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+}
+ 
 * {
   font-family: 'Inter', sans-serif;
 }
-
+ 

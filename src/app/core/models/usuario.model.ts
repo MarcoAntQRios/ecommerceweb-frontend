@@ -6,13 +6,14 @@ export interface IUsuario {
   telefono: string;
   direccion: string;
   rolNombre: string;
+  rolId: number;
 }
 
 export interface IUsuarioRequest {
   nombre: string;
   apellido: string;
   correo: string;
-  password: string;
+  password?: string;
   telefono: string;
   direccion: string;
   rolId: number;

@@ -25,6 +25,8 @@ export class UsuarioService {
     return this.http.put<IUsuario>(`${this.API_BASE}/usuarios/${id}`, usuario);
   }
 
+
+  
   getRoles(): Observable<{ id: number; nombre: string }[]> {
     return this.http.get<{ id: number; nombre: string }[]>(`${this.API_BASE}/roles`);
   }

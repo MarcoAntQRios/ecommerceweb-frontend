@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { PrimeNgMenuModule } from '../../modules/primeng-menu.module';
 import { PrimeNgButtonModule } from '../../modules/primeng-button.module';
 import { CartService } from '../../../core/services/cart.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Subject, filter, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -15,7 +16,7 @@ import { MegaMenuItem, MenuItem } from 'primeng/api';
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterModule, PrimeNgMenuModule, PrimeNgButtonModule, MegaMenuModule, MenuModule],
-   templateUrl: './header.component.html',
+  templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -31,14 +32,65 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     public cartService: CartService,
+    public authService: AuthService,
     private router: Router
   ) {
     this.cart$ = this.cartService.cart$.pipe(takeUntil(this.destroy$));
+
+   effect(() => {
+  const loggedIn = this.authService.isLoggedIn();
+
+  if (loggedIn) {
+    const isAdmin = this.authService.isAdmin();
+
+    const clientItems: MenuItem[] = isAdmin ? [] : [
+      { separator: true },
+      {
+        label: 'Mis compras',
+        icon: 'pi pi-shopping-bag',
+        command: () => this.router.navigate(['/mis-compras'])
+      }
+    ];
+
+        this.userMenuItems = [
+          {
+            label: 'Mi perfil',
+            icon: 'pi pi-id-card',
+            command: () => this.router.navigate(['/profile'])
+          },
+          ...clientItems,
+          { separator: true },
+          {
+            label: 'Cerrar sesión',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.authService.logout();
+              this.router.navigate(['/home']);
+            }
+          }
+        ];
+      } else {
+        this.userMenuItems = [
+          {
+            label: 'Iniciar sesión',
+            icon: 'pi pi-sign-in',
+            command: () => this.router.navigate(['/login'])
+          },
+          { separator: true },
+          {
+            label: 'Registrarse',
+            icon: 'pi pi-user-plus',
+            command: () => this.router.navigate(['/register'])
+          }
+        ];
+      }
+    });
   }
+
+
 
   ngOnInit(): void {
     this.buildMenu();
-    this.buildUserMenu();
     this.routerSub = this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => this.buildMenu());
@@ -52,39 +104,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   showCart(): void { this.sidebarVisible = true; }
 
-  increaseQuantity(productId: number): void {
-    const cart = this.cartService.getCartSnapshot();
-    const item = cart.items.find(i => i.product.id === productId);
-    if (item) this.cartService.updateQuantity(productId, item.quantity + 1);
-  }
+  increaseQuantity(detalleId: number): void {
+  this.cartService.aumentar(detalleId);
+}
 
-  decreaseQuantity(productId: number): void {
-    const cart = this.cartService.getCartSnapshot();
-    const item = cart.items.find(i => i.product.id === productId);
-    if (item && item.quantity > 1) this.cartService.updateQuantity(productId, item.quantity - 1);
-  }
+decreaseQuantity(detalleId: number): void {
+  this.cartService.disminuir(detalleId);
+}
 
-  removeItem(productId: number): void { this.cartService.removeFromCart(productId); }
+removeItem(detalleId: number): void {
+  this.cartService.removeFromCart(detalleId);
+}
 
-  goToCheckout(): void {
-    this.sidebarVisible = false;
-    this.router.navigate(['/checkout']);
-  }
-
-  private buildUserMenu(): void {
-  this.userMenuItems = [
-    {
-      label: 'Iniciar sesión',
-      icon: 'pi pi-sign-in',
-      command: () => this.router.navigate(['/login'])
-    },
-    { separator: true },
-    {
-      label: 'Registrarse',
-      icon: 'pi pi-user-plus',
-      command: () => this.router.navigate(['/register'])
-    }
-  ];
+  goToCart(): void {
+  this.sidebarVisible = false;
+  this.router.navigate(['/cart']);
 }
 
   private buildMenu(): void {
@@ -108,44 +142,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
         icon: 'pi pi-desktop',
         styleClass: enProductos ? 'active-root' : '',
         items: [
-          [{
-            label: 'PC',
-            items: this.buildSubItems('Pc', [
-              { label: 'Gaming',  tipo: 'Gaming',  icon: 'pi pi-play-circle' },
-              { label: 'Estudio', tipo: 'Estudio', icon: 'pi pi-book' },
-              { label: 'Oficina', tipo: 'Oficina', icon: 'pi pi-briefcase' },
-              { label: 'Edicion',  tipo: 'Edicion',  icon: 'pi pi-palette' },
-            ], categoriaActiva, tipoActivo)
-          }],
-          [{
-            label: 'Laptop',
-            items: this.buildSubItems('Laptop', [
-              { label: 'Gaming',  tipo: 'Gaming',  icon: 'pi pi-play-circle' },
-              { label: 'Estudio', tipo: 'Estudio', icon: 'pi pi-book' },
-              { label: 'Oficina', tipo: 'Oficina', icon: 'pi pi-briefcase' },
-              { label: 'Edicion',  tipo: 'Edicion',  icon: 'pi pi-palette' },
-            ], categoriaActiva, tipoActivo)
-          }],
-          [{
-            label: 'Perifericos',
-            items: this.buildSubItems('Perifericos', [
-              { label: 'Monitores',   tipo: 'Monitores', icon: 'pi pi-desktop' },
-              { label: 'Teclados',    tipo: 'Teclado',  icon: 'pi pi-table' },
-              { label: 'Mouse',       tipo: 'Mouse',     icon: 'pi pi-stop-circle' },
-              { label: 'Auriculares', tipo: 'Audio',     icon: 'pi pi-headphones' },
-              { label: 'Webcams',     tipo: 'Webcam',    icon: 'pi pi-video' },
-            ], categoriaActiva, tipoActivo)
-          }],
-          [{
-            label: 'Componentes',
-            items: this.buildSubItems('Componentes', [
-              { label: 'Procesadores',      tipo: 'Procesadores', icon: 'pi pi-microchip' },
-              { label: 'Tarjetas Gráficas', tipo: 'Gpu',          icon: 'pi pi-objects-column' },
-              { label: 'Memorias RAM',      tipo: 'Ram',          icon: 'pi pi-server' },
-              { label: 'Almacenamiento',    tipo: 'Storage',      icon: 'pi pi-database' },
-              { label: 'Placas Base',       tipo: 'Motherboard',  icon: 'pi pi-microchip-ai' },
-            ], categoriaActiva, tipoActivo)
-          }],
+          [{ label: 'PC', items: this.buildSubItems('Pc', [
+            { label: 'Gaming',  tipo: 'Gaming',  icon: 'pi pi-play-circle' },
+            { label: 'Estudio', tipo: 'Estudio', icon: 'pi pi-book' },
+            { label: 'Oficina', tipo: 'Oficina', icon: 'pi pi-briefcase' },
+            { label: 'Edicion', tipo: 'Edicion', icon: 'pi pi-palette' },
+          ], categoriaActiva, tipoActivo) }],
+          [{ label: 'Laptop', items: this.buildSubItems('Laptop', [
+            { label: 'Gaming',  tipo: 'Gaming',  icon: 'pi pi-play-circle' },
+            { label: 'Estudio', tipo: 'Estudio', icon: 'pi pi-book' },
+            { label: 'Oficina', tipo: 'Oficina', icon: 'pi pi-briefcase' },
+            { label: 'Edicion', tipo: 'Edicion', icon: 'pi pi-palette' },
+          ], categoriaActiva, tipoActivo) }],
+          [{ label: 'Perifericos', items: this.buildSubItems('Perifericos', [
+            { label: 'Monitores',   tipo: 'Monitores', icon: 'pi pi-desktop' },
+            { label: 'Teclados',    tipo: 'Teclado',   icon: 'pi pi-table' },
+            { label: 'Mouse',       tipo: 'Mouse',     icon: 'pi pi-stop-circle' },
+            { label: 'Auriculares', tipo: 'Audio',     icon: 'pi pi-headphones' },
+            { label: 'Webcams',     tipo: 'Webcam',    icon: 'pi pi-video' },
+          ], categoriaActiva, tipoActivo) }],
+          [{ label: 'Componentes', items: this.buildSubItems('Componentes', [
+            { label: 'Procesadores',      tipo: 'Procesadores', icon: 'pi pi-microchip' },
+            { label: 'Tarjetas Graficas', tipo: 'Tarjetas Graficas',          icon: 'pi pi-objects-column' },
+            { label: 'Memorias RAM',      tipo: 'Memorias Ram',          icon: 'pi pi-server' },
+            { label: 'Almacenamiento',    tipo: 'Almacenamiento',      icon: 'pi pi-database' },
+            { label: 'Placas Base',       tipo: 'Placas Base',  icon: 'pi pi-microchip-ai' },
+          ], categoriaActiva, tipoActivo) }],
         ]
       }
     ];
@@ -165,4 +187,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       styleClass: (categoria === categoriaActiva && item.tipo === tipoActivo) ? 'active-sub' : ''
     }));
   }
+  getInitials(): string {
+  const nombre = this.authService.currentUser()?.nombre ?? '';
+  return nombre
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 }

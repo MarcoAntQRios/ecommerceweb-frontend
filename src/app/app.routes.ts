@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { authGuard, adminGuard } from './core/guard/auth.guard';
 export const routes: Routes = [
   {
     path: '',
@@ -23,13 +23,20 @@ export const routes: Routes = [
   },
   {
     path: 'checkout',
+    canActivate: [authGuard],
     loadChildren: () => import('./features/checkout/checkout.routes')
       .then(m => m.CHECKOUT_ROUTES)
   },
+ {
+  path: 'admin',
+  canActivate: [authGuard, adminGuard],
+  loadChildren: () => import('./features/admin/admin.routes')
+    .then(m => m.ADMIN_ROUTES)
+},
   {
-    path: 'admin',
-    loadChildren: () => import('./features/admin/admin.routes')
-      .then(m => m.ADMIN_ROUTES)
+    path: 'login',
+    loadComponent: () => import('./features/auth/pages/login/login.component')
+      .then(m => m.LoginComponent)
   },
   {
     path: 'register',
@@ -41,6 +48,28 @@ export const routes: Routes = [
     loadComponent: () => import('./features/recomendador/recomendador.component')
       .then(m => m.RecomendadorComponent)
   },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/profile/profile.component')
+      .then(m => m.ProfileComponent)
+  },
+  {
+    path: 'mis-compras',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/mis-compras/mis-compras.component')
+      .then(m => m.MisComprasComponent)
+  },
+  {
+  path: 'checkout-success',
+  loadComponent: () => import('./features/checkout/pages/checkout-success.component')
+    .then(m => m.CheckoutSuccessComponent)
+},
+{
+  path: 'checkout-cancel',
+  loadComponent: () => import('./features/checkout/pages/checkout-cancel.component')
+    .then(m => m.CheckoutCancelComponent)
+},
   {
     path: '**',
     redirectTo: 'home'

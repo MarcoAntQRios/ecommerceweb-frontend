@@ -1,24 +1,28 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+
   return next(req).pipe(
-    catchError(error => {
+    catchError((error: HttpErrorResponse) => {
       console.error('Error HTTP:', error);
 
-      let errorMessage = 'Error desconocido';
-
-      if (error.error instanceof ErrorEvent) {
-        // Error en el cliente
-        errorMessage = `Error: ${error.error.message}`;
-      } else {
-        // Error del servidor
-        errorMessage = `Error ${error.status}: ${error.error?.message || error.statusText}`;
+      if (error.status === 401) {
+        localStorage.removeItem('auth_token');
+        router.navigate(['/login']);
       }
 
-      console.error(errorMessage);
-      return throwError(() => new Error(errorMessage));
+      if (error.status === 403) {
+        router.navigate(['/home']);
+      }
+
+      // Se relanza el HttpErrorResponse original para que cada
+      // componente pueda leer error.status y error.error.mensaje
+      return throwError(() => error);
     })
   );
 };

@@ -22,18 +22,18 @@ export class RecomendadorComponent implements OnInit {
   productosFiltrados: IProduct[] = [];
 
   usos = [
-    { valor: 'Gaming',  nombre: 'Gaming',  icon: '🎮', descripcion: 'Juegos AAA, fps estable y experiencias de alto rendimiento.', tags: ['GPU dedicada', '16 GB RAM+'] },
-    { valor: 'estudio', nombre: 'Estudio',  icon: '📚', descripcion: 'Tareas, apuntes, videollamadas y navegación en el aula.',     tags: ['Batería larga', 'Ligero'] },
-    { valor: 'edicion', nombre: 'Edición',  icon: '🎨', descripcion: 'Edición de imagen, video 4K y producción creativa.',           tags: ['sRGB 100%', 'SSD NVMe'] },
-    { valor: 'oficina', nombre: 'Oficina',  icon: '💼', descripcion: 'Documentos, correo, hojas de cálculo y reuniones online.',     tags: ['Multi-puerto', 'Teclado cómodo'] }
-  ];
+  { valor: 'Gaming', nombre: 'Gaming', icon: 'pi-bolt',     descripcion: 'Juegos AAA, fps estable y experiencias de alto rendimiento.', tags: ['GPU dedicada', '16 GB RAM+'] },
+  { valor: 'estudio', nombre: 'Estudio', icon: 'pi-book',        descripcion: 'Tareas, apuntes, videollamadas y navegación en el aula.',     tags: ['Batería larga', 'Ligero'] },
+  { valor: 'edicion', nombre: 'Edición', icon: 'pi-palette',     descripcion: 'Edición de imagen, video 4K y producción creativa.',          tags: ['sRGB 100%', 'SSD NVMe'] },
+  { valor: 'oficina', nombre: 'Oficina', icon: 'pi-briefcase',   descripcion: 'Documentos, correo, hojas de cálculo y reuniones online.',    tags: ['Multi-puerto', 'Teclado cómodo'] }
+];
 
-  rangos = [
-    { valor: '0-2000',     nombre: 'Menos de S/ 2,000',      icon: '💰', descripcion: 'Ideal para uso básico y estudio.' },
-    { valor: '2000-4000',  nombre: 'S/ 2,000 - S/ 4,000',    icon: '💵', descripcion: 'Buen rendimiento para trabajo y estudio.' },
-    { valor: '4000-6000',  nombre: 'S/ 4,000 - S/ 6,000',    icon: '💎', descripcion: 'Alto rendimiento para diseño y gaming.' },
-    { valor: '6000-99999', nombre: 'Más de S/ 6,000',         icon: '🚀', descripcion: 'Lo mejor del mercado sin compromisos.' }
-  ];
+rangos = [
+  { valor: '0-2000',     nombre: 'Menos de S/ 2,000',   icon: 'pi-wallet',      descripcion: 'Ideal para uso básico y estudio.' },
+  { valor: '2000-4000',  nombre: 'S/ 2,000 - S/ 4,000', icon: 'pi-credit-card', descripcion: 'Buen rendimiento para trabajo y estudio.' },
+  { valor: '4000-6000',  nombre: 'S/ 4,000 - S/ 6,000', icon: 'pi-star',         descripcion: 'Alto rendimiento para diseño y gaming.' },
+  { valor: '6000-99999', nombre: 'Más de S/ 6,000',      icon: 'pi-trophy',        descripcion: 'Lo mejor del mercado sin compromisos.' }
+];
 
   constructor(
     private router: Router,
@@ -83,7 +83,6 @@ export class RecomendadorComponent implements OnInit {
   }
 
   irAHome(): void { this.router.navigate(['/']); }
-  irAProductos(): void { this.router.navigate(['/products']); }
 
   reiniciar(): void {
     this.paso = 1;
@@ -93,7 +92,17 @@ export class RecomendadorComponent implements OnInit {
     this.rangoNombre = '';
     this.productosFiltrados = [];
   }
-
+irAProductos(): void {
+  this.router.navigate(['/products'], {
+    queryParams: {
+      categoria: this.categoriaSeleccionada,
+      tipo: this.usoSeleccionado
+    }
+  });
+}
+verProducto(id: number): void {
+  this.router.navigate(['/products', id]);
+}
   onImageError(event: any): void {
     event.target.src = 'https://placehold.co/300x200?text=Sin+Imagen';
   }

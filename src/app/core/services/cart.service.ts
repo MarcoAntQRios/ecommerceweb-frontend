@@ -1,95 +1,113 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ICart, ICartItem } from '../models/cart.model';
+import { tap } from 'rxjs/operators';
+import {
+  ICart,
+  ICartItem,
+  ICarritoBackend,
+  IDetalleCarritoRequest
+} from '../models/cart.model';
 import { IProduct } from '../models/product.model';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
+  private readonly API = 'http://localhost:8060/api';
+  private carritoId: number | null = null;
+
   private cartSubject = new BehaviorSubject<ICart>({
     items: [],
     total: 0,
     itemCount: 0
   });
-
   public cart$ = this.cartSubject.asObservable();
 
-  constructor() {
-    // Cargar carrito del localStorage si existe, en lugar de localstorage tiene que ser de la BD
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      this.cartSubject.next(JSON.parse(savedCart));
-    }
-  }
+  constructor(private http: HttpClient) {}
 
-  addToCart(product: IProduct, quantity: number = 1): void {
-    const currentCart = this.cartSubject.value;
-    const existingItem = currentCart.items.find(
-      item => item.product.id === product.id
+  private mapearCarrito(backend: ICarritoBackend): ICart {
+  const items: ICartItem[] = backend.detalleCarrito
+    .sort((a, b) => a.id - b.id)  // ← agrega esto
+    .map(detalle => ({
+      detalleId: detalle.id,
+      product: {
+        id: detalle.productoId,
+        nombre: detalle.productoNombre,
+        precio: detalle.subtotal / detalle.cantidad,
+        descripcion: '',
+        stock: 0,
+        imagen: detalle.productoImagen ?? '',
+        tipoNombre: '',
+        categoriaNombre: ''
+      },
+      quantity: detalle.cantidad,
+      subtotal: detalle.subtotal
+    }));
+
+  return {
+    items,
+    total: items.reduce((sum, i) => sum + i.subtotal, 0),
+itemCount: items.reduce(
+  (total, item) => total + item.quantity,
+  0
+)  };
+}
+
+  inicializarCarrito(usuarioId: number): Observable<ICarritoBackend> {
+    return this.http.post<ICarritoBackend>(
+      `${this.API}/carritos/usuarios/${usuarioId}`, {}
+    ).pipe(
+      tap(backend => {
+        this.carritoId = backend.id;
+        this.refrescarCarrito();
+      })
     );
-
-    if (existingItem) {
-      existingItem.quantity += quantity;
-      existingItem.subtotal = existingItem.quantity * product.precio;
-    } else {
-      currentCart.items.push({
-        product,
-        quantity,
-        subtotal: product.precio * quantity
-      });
-    }
-
-    this.updateCart();
   }
 
-  removeFromCart(productId: number): void {
-    const currentCart = this.cartSubject.value;
-    currentCart.items = currentCart.items.filter(
-      item => item.product.id !== productId
-    );
-    this.updateCart();
+  refrescarCarrito(): void {
+    if (!this.carritoId) return;
+    this.http.get<ICarritoBackend>(
+      `${this.API}/carritos/${this.carritoId}`
+    ).subscribe(backend => {
+      this.cartSubject.next(this.mapearCarrito(backend));
+    });
   }
 
-  updateQuantity(productId: number, quantity: number): void {
-    const currentCart = this.cartSubject.value;
-    const item = currentCart.items.find(i => i.product.id === productId);
+  addToCart(product: IProduct, cantidad: number = 1): void {
+    if (!this.carritoId) return;
+    const body: IDetalleCarritoRequest = { productoId: product.id, cantidad };
+    this.http.post(`${this.API}/carritos/${this.carritoId}/productos`, body)
+      .subscribe(() => this.refrescarCarrito());
+  }
 
-    if (item) {
-      if (quantity <= 0) {
-        this.removeFromCart(productId);
-      } else {
-        item.quantity = quantity;
-        item.subtotal = quantity * item.product.precio;
-        this.updateCart();
-      }
-    }
+  removeFromCart(detalleId: number): void {
+    this.http.delete(`${this.API}/carrito-detalles/${detalleId}`)
+      .subscribe(() => this.refrescarCarrito());
+  }
+
+  aumentar(detalleId: number): void {
+    this.http.put(`${this.API}/carrito-detalles/${detalleId}/aumentar`, {})
+      .subscribe(() => this.refrescarCarrito());
+  }
+
+  disminuir(detalleId: number): void {
+    this.http.put(`${this.API}/carrito-detalles/${detalleId}/disminuir`, {})
+      .subscribe(() => this.refrescarCarrito());
+  }
+
+  limpiarLocal(): void {
+    this.carritoId = null;
+    this.cartSubject.next({ items: [], total: 0, itemCount: 0 });
   }
 
   clearCart(): void {
-    this.cartSubject.next({
-      items: [],
-      total: 0,
-      itemCount: 0
-    });
-    localStorage.removeItem('cart');
-  }
-
-  private updateCart(): void {
-    const currentCart = this.cartSubject.value;
-    currentCart.total = currentCart.items.reduce(
-      (sum, item) => sum + item.subtotal,
-      0
-    );
-    currentCart.itemCount = currentCart.items.length;
-    this.cartSubject.next(currentCart);
-    // Guardar en localStorage
-    localStorage.setItem('cart', JSON.stringify(currentCart));
-  }
-
-  getCart(): Observable<ICart> {
-    return this.cart$;
+    this.limpiarLocal();
   }
 
   getCartSnapshot(): ICart {
     return this.cartSubject.value;
+  }
+
+  getCarritoId(): number | null {
+    return this.carritoId;
   }
 }

@@ -26,40 +26,61 @@
         </ng-template>
       </p-table>
 
-      <p-dialog [(visible)]="displayDialog" header="Detalle de Venta" [modal]="true" [style]="{width: '50vw'}">
-        @if (selectedVenta) {
-          <div class="venta-detail">
-            <p><strong>ID:</strong> {{ selectedVenta.id }}</p>
-            <p><strong>Usuario:</strong> {{ selectedVenta.usuarioNombre }}</p>
-            <p><strong>Fecha:</strong> {{ selectedVenta.fecha | date:'medium' }}</p>
-            <p><strong>Estado:</strong> {{ selectedVenta.estado }}</p>
-            <p><strong>Total:</strong> S/ {{ selectedVenta.total }}</p>
+      <p-dialog [(visible)]="displayDialog" header="Detalle de Venta" [modal]="true" [style]="{width: '520px'}" [draggable]="false">
+  @if (selectedVenta) {
+    <div>
+      <!-- Header -->
+      <div class="detail-header">
+        <div>
+        <p class="order-id">NRO ORD-0{{ selectedVenta.id }}</p>
+          <p class="order-date">{{ selectedVenta.fecha | date:'EEEE, d MMM yyyy · HH:mm' }}</p>
+        </div>
+        <span class="badge-estado" [ngClass]="'badge-' + selectedVenta.estado.toLowerCase()">
+          {{ selectedVenta.estado }}
+        </span>
+      </div>
 
-            <h4 style="margin-top: 1rem">Productos:</h4>
-            <table class="detalle-table">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Cantidad</th>
-                  <th>Precio</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (detalle of selectedVenta.detalleVenta; track detalle.productoId) {
-                  <tr>
-                    <td>{{ detalle.productoNombre }}</td>
-                    <td>{{ detalle.cantidad }}</td>
-                    <td>S/ {{ detalle.precio }}</td>
-                    <td>S/ {{ detalle.subtotal }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-          <div class="dialog-footer">
-            <p-button label="Cerrar" icon="pi pi-times" (click)="displayDialog = false" />
-          </div>
-        }
-      </p-dialog>
+      <!-- Meta -->
+      <div class="detail-meta">
+        <div class="meta-card">
+          <div class="meta-label">Cliente</div>
+          <div class="meta-value">{{ selectedVenta.usuarioNombre }}</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Productos</div>
+          <div class="meta-value">{{ selectedVenta.detalleVenta.length }} ítem(s)</div>
+        </div>
+      </div>
+
+      <!-- Tabla productos -->
+      <p class="products-title">Productos del pedido</p>
+      <table class="detalle-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cant.</th>
+            <th>Precio unit.</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (detalle of selectedVenta.detalleVenta; track detalle.productoId) {
+            <tr>
+              <td class="product-name">{{ detalle.productoNombre }}</td>
+              <td><span class="qty-badge">x{{ detalle.cantidad }}</span></td>
+              <td>S/ {{ detalle.precio.toFixed(2) }}</td>
+              <td>S/ {{ detalle.subtotal.toFixed(2) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <!-- Total -->
+      <div class="total-row">
+        <span class="total-label">Total pagado</span>
+        <span class="total-amount">S/ {{ selectedVenta.total.toFixed(2) }}</span>
+      </div>
+    </div>
+  }
+</p-dialog>
     </div>

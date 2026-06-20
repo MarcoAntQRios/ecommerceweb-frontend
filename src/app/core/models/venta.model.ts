@@ -13,6 +13,7 @@ export interface IVenta {
   fecha: string;
   total: number;
   estado: string;
+  urlCheckout: string;
   detalleVenta: IDetalleVenta[];
 }
 

@@ -1,21 +1,34 @@
+/* app.component.css */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* puede crecer más de 100vh si el contenido es largo */
+}
+
+app-header,
+app-footer {
+  flex-shrink: 0;
+}
+
 .container {
   display: flex;
   gap: 0;
-  min-height: calc(100vh - 80px);
+  flex: 1; /* antes: min-height: calc(100vh - 80px); */
 }
 
 .content {
   flex: 1;
   padding: 2rem;
   background: #fafafa;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
-
   .content {
     padding: 1rem;
   }

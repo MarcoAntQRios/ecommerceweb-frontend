@@ -1,0 +1,113 @@
+<p-toast position="top-right" />
+
+<div class="profile-container">
+
+  <!-- CABECERA -->
+  <div class="profile-header">
+    <div class="avatar-circle">
+      <i class="pi pi-user"></i>
+    </div>
+    <div class="profile-title">
+      <h2 *ngIf="usuario()">{{ usuario()!.nombre }} {{ usuario()!.apellido }}</h2>
+      <p-tag
+        [value]="usuario()?.rolNombre || ''"
+        [severity]="usuario()?.rolNombre === 'ADMIN' ? 'danger' : 'info'"
+        styleClass="role-tag">
+      </p-tag>
+    </div>
+  </div>
+
+  <p-divider />
+
+  <!-- FORMULARIO -->
+  <form [formGroup]="profileForm" (ngSubmit)="saveChanges()" class="profile-form">
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="nombre">Nombre</label>
+        <input
+          pInputText id="nombre" formControlName="nombre"
+          [readonly]="!editMode()"
+          [class.readonly-field]="!editMode()"
+          [class.ng-invalid]="isFieldInvalid('nombre')" />
+        <small *ngIf="isFieldInvalid('nombre')" class="error-msg">El nombre es requerido.</small>
+      </div>
+
+      <div class="field">
+        <label for="apellido">Apellido</label>
+        <input
+          pInputText id="apellido" formControlName="apellido"
+          [readonly]="!editMode()"
+          [class.readonly-field]="!editMode()"
+          [class.ng-invalid]="isFieldInvalid('apellido')" />
+        <small *ngIf="isFieldInvalid('apellido')" class="error-msg">El apellido es requerido.</small>
+      </div>
+
+      <div class="field field-full">
+        <label for="correo">Correo electrónico</label>
+        <input
+          pInputText id="correo" formControlName="correo" type="email"
+          [readonly]="!editMode()"
+          [class.readonly-field]="!editMode()"
+          [class.ng-invalid]="isFieldInvalid('correo')" />
+        <small *ngIf="isFieldInvalid('correo')" class="error-msg">Ingresa un correo válido.</small>
+      </div>
+
+      <div class="field">
+        <label for="telefono">Teléfono</label>
+        <input
+          pInputText id="telefono" formControlName="telefono"
+          [readonly]="!editMode()"
+          [class.readonly-field]="!editMode()"
+          [class.ng-invalid]="isFieldInvalid('telefono')" />
+        <small *ngIf="isFieldInvalid('telefono')" class="error-msg">El teléfono es requerido.</small>
+      </div>
+
+      <div class="field">
+        <label for="direccion">Dirección</label>
+        <input
+          pInputText id="direccion" formControlName="direccion"
+          [readonly]="!editMode()"
+          [class.readonly-field]="!editMode()"
+          [class.ng-invalid]="isFieldInvalid('direccion')" />
+        <small *ngIf="isFieldInvalid('direccion')" class="error-msg">La dirección es requerida.</small>
+      </div>
+
+    </div>
+
+    <!-- BOTONES -->
+    <div class="profile-actions">
+
+      <!-- Modo vista: solo "Actualizar datos" -->
+      <ng-container *ngIf="!editMode()">
+        <p-button
+          label="Actualizar datos"
+          icon="pi pi-pencil"
+          (click)="enableEdit()"
+          [loading]="loading()">
+        </p-button>
+      </ng-container>
+
+      <!-- Modo edición: Guardar + Cancelar -->
+      <ng-container *ngIf="editMode()">
+        <p-button
+          label="Guardar cambios"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="loading()">
+        </p-button>
+        <p-button
+          label="Cancelar"
+          icon="pi pi-times"
+          severity="secondary"
+          [outlined]="true"
+          (click)="cancelEdit()"
+          [disabled]="loading()">
+        </p-button>
+      </ng-container>
+
+    </div>
+
+  </form>
+</div>

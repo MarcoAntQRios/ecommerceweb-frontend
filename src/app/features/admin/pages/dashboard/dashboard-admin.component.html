@@ -1,0 +1,153 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <h2>Dashboard</h2>
+      <p class="subtitle">Resumen general de la tienda</p>
+    </div>
+    <button class="refresh-btn" (click)="cargarDatos()" [disabled]="loading">
+      <i class="pi pi-refresh" [class.spin]="loading"></i>
+      Actualizar
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <span>Cargando datos...</span>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-icon icon-sky"><i class="pi pi-user"></i></span>
+        <div>
+          <span class="kpi-value">{{ soloClientes.length }}</span>
+          <span class="kpi-label">Clientes registrados</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon icon-purple"><i class="pi pi-shield"></i></span>
+        <div>
+          <span class="kpi-value">{{ soloAdmins.length }}</span>
+          <span class="kpi-label">Administradores</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon icon-blue"><i class="pi pi-box"></i></span>
+        <div>
+          <span class="kpi-value">{{ totalProductos }}</span>
+          <span class="kpi-label">Productos totales</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon icon-green"><i class="pi pi-dollar"></i></span>
+        <div>
+          <span class="kpi-value">S/ {{ valorInventario | number:'1.0-2':'en-US' }}</span>
+          <span class="kpi-label">Valor del inventario</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon icon-green"><i class="pi pi-check-circle"></i></span>
+        <div>
+          <span class="kpi-value">{{ productosDisponibles.length }}</span>
+          <span class="kpi-label">Productos disponibles</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon icon-red"><i class="pi pi-times-circle"></i></span>
+        <div>
+          <span class="kpi-value">{{ productosAgotados.length }}</span>
+          <span class="kpi-label">Productos agotados</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon icon-amber"><i class="pi pi-exclamation-triangle"></i></span>
+        <div>
+          <span class="kpi-value">{{ productosStockBajo.length }}</span>
+          <span class="kpi-label">Stock bajo (≤ 5 uds.)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productos y Usuarios en la misma fila -->
+    <div class="tables-row">
+
+      <!-- Listado de Productos -->
+      <div class="section">
+        <div class="section-header">
+          <h3>Listado de Productos</h3>
+          <a routerLink="/admin/products" class="section-link">Gestionar <i class="pi pi-arrow-right"></i></a>
+        </div>
+        <p-table [value]="productosOrdenados" [rows]="5" [paginator]="true" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="col-id">ID</th>
+              <th class="col-thumb">Imagen</th>
+              <th>Nombre</th>
+              <th class="col-price">Precio</th>
+              <th class="col-stock">Stock</th>
+              <th class="col-status">Estado</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-producto>
+            <tr>
+              <td class="col-id">{{ producto.id }}</td>
+              <td class="col-thumb"><img [src]="producto.imagen" [alt]="producto.nombre" class="product-thumb" onerror="this.src='assets/no-image.png'" /></td>
+              <td>{{ producto.nombre }}</td>
+              <td class="col-price precio-verde">S/ {{ producto.precio | number:'1.0-2':'en-US' }}</td>
+              <td class="col-stock">{{ producto.stock }}</td>
+              <td class="col-status"><span class="badge" [ngClass]="estadoClase(producto.stock)">{{ estadoStock(producto.stock) }}</span></td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr><td colspan="6">No hay productos.</td></tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <!-- Listado de Usuarios -->
+      <div class="section">
+        <div class="section-header">
+          <h3>Listado de Usuarios</h3>
+          <a routerLink="/admin/users" class="section-link">Gestionar <i class="pi pi-arrow-right"></i></a>
+        </div>
+        <p-table [value]="todosUsuarios" [rows]="5" [paginator]="true" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="col-id">ID</th>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th class="col-status">Rol</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-usuario>
+            <tr>
+              <td class="col-id">{{ usuario.id }}</td>
+              <td>
+                <div class="usuario-cell">
+                  <span class="avatar" [ngClass]="usuario.rolNombre?.toUpperCase().includes('ADMIN') ? 'avatar-admin' : 'avatar-cliente'">
+                    {{ (usuario.nombre || '?').charAt(0).toUpperCase() }}
+                  </span>
+                  <span class="usuario-nombre-text">{{ usuario.nombre }} {{ usuario.apellido }}</span>
+                </div>
+              </td>
+              <td>{{ usuario.correo }}</td>
+              <td class="col-status">
+                <span class="badge" [ngClass]="usuario.rolNombre?.toUpperCase().includes('ADMIN') ? 'badge-admin' : 'badge-cliente'">
+                  {{ usuario.rolNombre }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr><td colspan="4">No hay usuarios.</td></tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+    </div>
+
+  </ng-container>
+</div>

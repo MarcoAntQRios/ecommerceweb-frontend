@@ -64,10 +64,18 @@
     }
     .price { font-size: 1.4rem; font-weight: 700; color: #007bff; }
     .stock-text { font-size: 0.8rem; color: #999; }
-    .buttons-section { margin-top: 0.75rem; }
-    @media (max-width: 768px) {
-      .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 1rem;
-      }
-    }
+    .buttons-section {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.buttons-section p-button {
+  flex: 1;
+}
+
+.buttons-section ::ng-deep .p-button {
+  width: 100%;
+  justify-content: center;
+}

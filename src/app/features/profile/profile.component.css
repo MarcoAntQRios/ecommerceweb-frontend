@@ -1,0 +1,98 @@
+.profile-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.09);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.avatar-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary-color, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-circle i {
+  font-size: 2rem;
+  color: #fff;
+}
+
+.profile-title h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.4rem;
+  color: #1e293b;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 1.5rem;
+  margin-top: 1.2rem;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.field input {
+  width: 100%;
+}
+
+.readonly-field {
+  background: #f1f5f9 !important;
+  cursor: default !important;
+  color: #334155;
+}
+
+.error-msg {
+  color: #ef4444;
+  font-size: 0.78rem;
+}
+
+.optional {
+  font-weight: 400;
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+  justify-content: flex-end;
+}
+
+.role-tag {
+  font-size: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .field-full { grid-column: 1; }
+  .profile-container { padding: 1rem; margin: 1rem; }
+}

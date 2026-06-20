@@ -1,68 +1,130 @@
 <header class="header">
-      <div class="header-content">
-        <div class="logo">
-          <h1>🛒 E-Commerce</h1>
-        </div>
-        <nav class="nav">
-          <p-megamenu [model]="megaMenuItems" styleClass="custom-megamenu" />
-        </nav>
-        <div class="actions-section">
-          <div class="user-menu-wrapper">
-            <p-button
-              label="Mi cuenta"
-              icon="pi pi-user"
-              [text]="true"
-              severity="secondary"
-              (click)="userMenu.toggle($event)">
-            </p-button>
-            <p-menu #userMenu [model]="userMenuItems" [popup]="true" />
+  <div class="header-content">
+    <div class="logo">
+      <h1><i class="pi pi-shopping-bag"></i> ProducTec</h1>
+    </div>
+    <nav class="nav">
+      <p-megamenu [model]="megaMenuItems" styleClass="custom-megamenu" />
+    </nav>
+    <div class="actions-section">
+      <div class="user-menu-wrapper">
+        <div class="user-avatar-wrapper" (click)="userMenu.toggle($event)">
+          <div class="avatar-circle" *ngIf="authService.isLoggedIn(); else noUser">
+            {{ getInitials() }}
           </div>
-
-          <p-button
-            icon="pi pi-shopping-cart"
-            [rounded]="true"
-            [text]="true"
-            (click)="showCart()"
-            [badge]="((cart$ | async)?.itemCount ?? 0).toString()"
-            badgeStyleClass="p-badge-danger">
-          </p-button>
+          <ng-template #noUser>
+            <i class="pi pi-user" style="font-size: 1.1rem; color: #666;"></i>
+          </ng-template>
+          <span class="avatar-name">
+            {{ (authService.isLoggedIn() && authService.currentUser()?.nombre) ? authService.currentUser()!.nombre : 'Mi cuenta' }}
+          </span>
+          <i class="pi pi-chevron-down avatar-chevron"></i>
         </div>
-      </div>
-    </header>
-
-    <p-drawer
-      [(visible)]="sidebarVisible"
-      position="right"
-      styleClass="cart-sidebar"
-      [modal]="true"
-      [showCloseIcon]="true">
-      <ng-template pTemplate="header">
-        <h3>🛒 Carrito ({{ (cart$ | async)?.itemCount }} items)</h3>
-      </ng-template>
-
-      <div class="cart-items-container">
-        <div *ngIf="((cart$ | async)?.items?.length ?? 0) === 0" class="empty-cart">
-          <p>Tu carrito está vacío</p>
-        </div>
-        <div *ngFor="let item of (cart$ | async)?.items" class="cart-item">
-          <img [src]="item.product.imagen" [alt]="item.product.nombre" />
-          <div class="item-details">
-            <p class="item-name">{{ item.product.nombre }}</p>
-            <p class="item-price">S/ {{ item.product.precio }}</p>
-            <div class="quantity-controls">
-              <button (click)="decreaseQuantity(item.product.id)">-</button>
-              <span>{{ item.quantity }}</span>
-              <button (click)="increaseQuantity(item.product.id)">+</button>
-            </div>
-          </div>
-          <button class="remove-btn" (click)="removeItem(item.product.id)">×</button>
-        </div>
+        <p-menu #userMenu [model]="userMenuItems" [popup]="true" />
       </div>
 
-      <ng-template pTemplate="footer" *ngIf="((cart$ | async)?.items?.length ?? 0) > 0">
-        <div class="cart-footer">
-          <p class="total">Total: S/ {{ (cart$ | async)?.total }}</p>
-          <p-button label="Checkout" icon="pi pi-check" class="w-full" (click)="goToCheckout()"></p-button>
+      <button class="cart-trigger-btn" (click)="showCart()">
+        <i class="pi pi-shopping-cart"></i>
+        <span class="cart-badge" *ngIf="((cart$ | async)?.itemCount ?? 0) > 0">
+          {{ (cart$ | async)?.itemCount }}
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Cart Sidebar Drawer -->
+<p-drawer
+  [(visible)]="sidebarVisible"
+  position="right"
+  styleClass="cart-sidebar"
+  [modal]="true"
+  [showCloseIcon]="false">
+
+  <!-- Custom Header -->
+  <ng-template pTemplate="header">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <i class="pi pi-shopping-cart sidebar-icon"></i>
+        <h3>Mi Carrito</h3>
+        <span class="item-count-badge" *ngIf="((cart$ | async)?.itemCount ?? 0) > 0">
+          {{ (cart$ | async)?.itemCount }}
+        </span>
+      </div>
+      <button class="close-btn" (click)="sidebarVisible = false">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Body: items -->
+  <div class="sidebar-body">
+
+    <!-- Empty state -->
+    <div *ngIf="((cart$ | async)?.items?.length ?? 0) === 0" class="sidebar-empty">
+      <div class="empty-circle">
+        <i class="pi pi-shopping-cart"></i>
+      </div>
+      <p class="empty-title">Tu carrito está vacío</p>
+      <p class="empty-sub">Añade productos para comenzar</p>
+      <button class="sidebar-explore-btn" (click)="sidebarVisible = false; goToCart()">
+        <i class="pi pi-th-large"></i> Ver productos
+      </button>
+    </div>
+
+    <!-- Items list -->
+    <div class="sidebar-items" *ngIf="((cart$ | async)?.items?.length ?? 0) > 0">
+      <div class="sidebar-item" *ngFor="let item of (cart$ | async)?.items">
+
+        <div class="sidebar-item-image">
+          <img *ngIf="item.product.imagen" [src]="item.product.imagen" [alt]="item.product.nombre" />
+          <div *ngIf="!item.product.imagen" class="no-image-placeholder">
+            <i class="pi pi-desktop"></i>
+          </div>
         </div>
-      </ng-template>
-    </p-drawer>
+
+        <div class="sidebar-item-info">
+          <p class="sidebar-item-name">{{ item.product.nombre }}</p>
+          <p class="sidebar-item-price">S/ {{ item.product.precio | number:'1.0-2':'en-US' }}</p>
+
+          <div class="sidebar-qty-controls">
+            <button class="sidebar-qty-btn" (click)="decreaseQuantity(item.detalleId)">
+              <i class="pi pi-minus"></i>
+            </button>
+            <span class="sidebar-qty">{{ item.quantity }}</span>
+            <button class="sidebar-qty-btn" (click)="increaseQuantity(item.detalleId)">
+              <i class="pi pi-plus"></i>
+            </button>
+            <span class="sidebar-subtotal">S/ {{ item.subtotal | number:'1.0-2':'en-US' }}</span>
+          </div>
+        </div>
+
+        <button class="sidebar-remove-btn" (click)="removeItem(item.detalleId)" title="Eliminar">
+          <i class="pi pi-trash"></i>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="sidebar-footer" *ngIf="((cart$ | async)?.items?.length ?? 0) > 0">
+      <div class="sidebar-summary">
+        <div class="sidebar-summary-row">
+          <span>Productos</span>
+          <span>{{ (cart$ | async)?.itemCount }} unid.</span>
+        </div>
+        <div class="sidebar-summary-row sidebar-total-row">
+          <span>Total</span>
+          <span class="sidebar-total-amount">S/ {{ (cart$ | async)?.total | number:'1.0-2':'en-US' }}</span>
+        </div>
+      </div>
+      <button class="sidebar-checkout-btn" (click)="goToCart()">
+        <i class="pi pi-eye"></i> Ver carrito completo
+      </button>
+    </div>
+  </ng-template>
+
+</p-drawer>

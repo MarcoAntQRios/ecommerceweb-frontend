@@ -1,0 +1,116 @@
+<div class="compras-container">
+
+  <div class="page-header">
+    <h2>Mis Compras</h2>
+    <p class="subtitle">Historial de todas tus compras</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <i class="pi pi-spin pi-spinner"></i>
+    <p>Cargando...</p>
+  </div>
+
+  <div *ngIf="!loading && ventas.length === 0" class="empty-state">
+    <i class="pi pi-inbox"></i>
+    <h3>Aún no tienes compras</h3>
+    <p-button label="Ir a la tienda" icon="pi pi-arrow-right" routerLink="/products"></p-button>
+  </div>
+
+  <div *ngIf="!loading && ventas.length > 0" class="ventas-list">
+    <div *ngFor="let venta of ventas" class="venta-card">
+
+      <div class="card-top">
+        <div class="card-top-left">
+          <span class="order-id">ORD-{{ venta.id }}</span>
+          <span class="order-date">{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <span class="estado-badge" [ngClass]="'estado-' + venta.estado.toLowerCase()">
+          {{ venta.estado }}
+        </span>
+      </div>
+
+      <div class="card-totals">
+        <div class="total-block">
+          <span class="label">TOTAL</span>
+          <span class="value-big">S/ {{ venta.total | number:'1.2-2' }}</span>
+        </div>
+        <div class="total-block">
+          <span class="label">PRODUCTOS</span>
+          <span class="value-items">{{ venta.detalleVenta.length }} item{{ venta.detalleVenta.length !== 1 ? 's' : '' }}</span>
+        </div>
+      </div>
+
+      <div class="productos-preview">
+        <div class="producto-chip" *ngFor="let d of venta.detalleVenta">
+          <i class="pi pi-box"></i> {{ d.productoNombre }}
+        </div>
+      </div>
+
+      <div class="card-footer">
+  <button class="btn-detalle" (click)="abrirModal(venta)">
+    <i class="pi pi-eye"></i> Ver detalle
+  </button>
+  <button
+  *ngIf="venta.estado !== 'CANCELADO'"
+  class="btn-descarga"
+  (click)="descargarComprobante(venta.id)"
+  [disabled]="descargando === venta.id">
+  <i class="pi pi-download"></i>
+  {{ descargando === venta.id ? 'Descargando...' : 'Comprobante' }}
+</button>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" *ngIf="ventaSeleccionada" (click)="cerrarModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h3>Detalle de Venta</h3>
+      <button class="modal-close" (click)="cerrarModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-top">
+        <div>
+          <p class="modal-order-id">NRO ORD-{{ ventaSeleccionada.id }}</p>
+          <p class="modal-date">{{ ventaSeleccionada.fecha | date:'EEEE, dd MMM yyyy · HH:mm' }}</p>
+        </div>
+        <span class="estado-badge" [ngClass]="'estado-' + ventaSeleccionada.estado.toLowerCase()">
+          {{ ventaSeleccionada.estado }}
+        </span>
+      </div>
+
+      <p class="section-label">LISTA DE PRODUCTOS</p>
+
+      <div class="table-wrapper">
+        <table class="modal-table">
+          <thead>
+            <tr>
+              <th class="col-producto">PRODUCTO</th>
+              <th class="col-cant">CANT.</th>
+              <th class="col-precio">P. UNIT.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of ventaSeleccionada.detalleVenta">
+              <td class="col-producto">{{ d.productoNombre }}</td>
+              <td class="col-cant"><span class="qty-badge">x{{ d.cantidad }}</span></td>
+              <td class="col-precio">S/ {{ d.precio | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-total">
+        <span>Total a Pagar</span>
+        <span class="modal-total-val">S/ {{ ventaSeleccionada.total | number:'1.2-2' }}</span>
+      </div>
+
+    </div>
+  </div>
+</div>

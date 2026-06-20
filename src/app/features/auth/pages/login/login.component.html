@@ -1,0 +1,75 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <div class="login-left">
+      <div class="brand">
+        <i class="pi pi-shopping-bag brand-icon"></i>
+        <span class="brand-name">ProducTec</span>
+      </div>
+      <h3>Tu tienda de<br>tecnología</h3>
+      <p>Encuentra los mejores productos al mejor precio, con envío rápido y seguro.</p>
+      <div class="features">
+        <div class="feature-item">
+          <i class="pi pi-shield"></i>
+          <span>Compra segura</span>
+        </div>
+        <div class="feature-item">
+          <i class="pi pi-truck"></i>
+          <span>Envío rápido</span>
+        </div>
+        <div class="feature-item">
+          <i class="pi pi-star"></i>
+          <span>Mejores precios</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="login-header">
+        <h2>Iniciar sesión</h2>
+        <p class="subtitle">Ingresa tus credenciales para continuar</p>
+      </div>
+
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <p-iconfield>
+          <p-inputicon class="pi pi-envelope" />
+          <input pInputText type="email" [(ngModel)]="credentials.email"
+                 placeholder="correo@ejemplo.com" class="w-full" />
+        </p-iconfield>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <p-password [(ngModel)]="credentials.password"
+                    placeholder="••••••••"
+                    [feedback]="false"
+                    [toggleMask]="true"
+                    styleClass="w-full"
+                    inputStyleClass="w-full"
+                    (keyup.enter)="login()">
+        </p-password>
+      </div>
+
+      <div *ngIf="errorMsg" class="error-msg">
+        <i class="pi pi-exclamation-circle"></i> {{ errorMsg }}
+      </div>
+
+      <div class="form-footer">
+        <p-button label="Ingresar" icon="pi pi-sign-in"
+                  [loading]="loading" (click)="login()"
+                  styleClass="w-full">
+        </p-button>
+      </div>
+
+      <div class="divider">
+        <span>¿No tienes cuenta?</span>
+      </div>
+
+      <button class="btn-register" (click)="goToRegister()">
+        <i class="pi pi-user-plus"></i> Crear cuenta nueva
+      </button>
+    </div>
+
+  </div>
+</div>

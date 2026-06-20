@@ -34,7 +34,7 @@ export class ProductsAdminComponent implements OnInit, OnDestroy {
   'Laptop':      ['Gaming', 'Estudio', 'Oficina', 'Edicion'],
   'Monitores':      ['Gaming', 'Estudio', 'Oficina', 'Edicion'],
   'Perifericos': ['monitores', 'Teclado', 'Mouse', 'Audio', 'Webcam'],
-  'Componentes': ['Procesadores', 'Gpu', 'Ram', 'Storage', 'Motherboard'],
+  'Componentes': ['Procesadores', 'Tarjetas Graficas', 'Memorias Ram', 'Almacenamiento', 'Placas Base'],
 };
 
   constructor(private productService: ProductService) {}

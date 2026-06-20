@@ -1,147 +1,176 @@
- <div class="recomendador">
+<div class="recomendador">
 
-      <!-- STEPPER -->
-      <div class="stepper">
-        <div class="step" [ngClass]="{'active': paso >= 1, 'done': paso > 1}">
-          <span class="step-number">{{ paso > 1 ? '✓' : '1' }}</span>
-          <span class="step-label">Categoría</span>
-        </div>
-        <div class="step-line" [ngClass]="{'active': paso > 1}"></div>
-        <div class="step" [ngClass]="{'active': paso >= 2, 'done': paso > 2}">
-          <span class="step-number">{{ paso > 2 ? '✓' : '2' }}</span>
-          <span class="step-label">Uso</span>
-        </div>
-        <div class="step-line" [ngClass]="{'active': paso > 2}"></div>
-        <div class="step" [ngClass]="{'active': paso >= 3, 'done': paso > 3}">
-          <span class="step-number">{{ paso > 3 ? '✓' : '3' }}</span>
-          <span class="step-label">Presupuesto</span>
-        </div>
-        <div class="step-line" [ngClass]="{'active': paso > 3}"></div>
-        <div class="step" [ngClass]="{'active': paso >= 4}">
-          <span class="step-number">4</span>
-          <span class="step-label">Resultado</span>
-        </div>
-      </div>
-
-      <!-- PASO 1 - CATEGORÍA -->
-      <div *ngIf="paso === 1" class="paso-container">
-        <span class="paso-badge">Paso 1 de 3</span>
-        <h2>¿Qué estas buscando?</h2>
-        <p>Selecciona la categoría y te ayudamos a encontrar el ideal.</p>
-        <div class="opciones-grid">
-          <div class="opcion-card"
-            [ngClass]="{'selected': categoriaSeleccionada === 'pc'}"
-            (click)="seleccionarCategoria('pc')">
-            <div class="opcion-icon">🖥️</div>
-            <h3>PC de Escritorio</h3>
-            <p>Mayor potencia, fácil de actualizar y mejor rendimiento por precio.</p>
-            <div class="opcion-tags">
-              <span class="otag">Alto rendimiento</span>
-              <span class="otag">Actualizable</span>
-            </div>
-          </div>
-          <div class="opcion-card"
-            [ngClass]="{'selected': categoriaSeleccionada === 'Laptop'}"
-            (click)="seleccionarCategoria('Laptop')">
-            <div class="opcion-icon">💻</div>
-            <h3>Laptop</h3>
-            <p>Portátil, práctica y perfecta para trabajar desde cualquier lugar.</p>
-            <div class="opcion-tags">
-              <span class="otag">Portátil</span>
-              <span class="otag">Versátil</span>
-            </div>
-          </div>
-        </div>
-        <div class="paso-footer">
-          <p-button label="← Volver al inicio" [text]="true" severity="secondary" (click)="irAHome()"></p-button>
-          <p-button label="Continuar →" (click)="siguientePaso()" [disabled]="!categoriaSeleccionada"></p-button>
-        </div>
-      </div>
-
-      <!-- PASO 2 - USO -->
-      <div *ngIf="paso === 2" class="paso-container">
-        <span class="paso-badge">Paso 2 de 3</span>
-        <span class="tipo-badge">{{ categoriaSeleccionada === 'pc' ? '🖥️ PC' : '💻 Laptop' }} seleccionado</span>
-        <h2>¿Que tipo de uso le daras al equipo?</h2>
-        <p>Elige tu uso principal y ajustamos las recomendaciones.</p>
-        <div class="opciones-grid">
-          <div class="opcion-card" *ngFor="let uso of usos"
-            [ngClass]="{'selected': usoSeleccionado === uso.valor}"
-            (click)="seleccionarUso(uso.valor)">
-            <div class="opcion-icon">{{ uso.icon }}</div>
-            <h3>{{ uso.nombre }}</h3>
-            <p>{{ uso.descripcion }}</p>
-            <div class="opcion-tags">
-              <span class="otag" *ngFor="let tag of uso.tags">{{ tag }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="paso-footer">
-          <p-button label="← Atrás" [text]="true" severity="secondary" (click)="anteriorPaso()"></p-button>
-          <p-button label="Continuar →" (click)="siguientePaso()" [disabled]="!usoSeleccionado"></p-button>
-        </div>
-      </div>
-
-      <!-- PASO 3 - PRESUPUESTO -->
-      <div *ngIf="paso === 3" class="paso-container">
-        <span class="paso-badge">Paso 3 de 3</span>
-        <h2>¿Cuál es tu presupuesto?</h2>
-        <p>Te mostramos productos dentro de tu rango de precio.</p>
-        <div class="opciones-grid">
-          <div class="opcion-card" *ngFor="let rango of rangos"
-            [ngClass]="{'selected': rangoSeleccionado === rango.valor}"
-            (click)="seleccionarRango(rango.valor)">
-            <div class="opcion-icon">{{ rango.icon }}</div>
-            <h3>{{ rango.nombre }}</h3>
-            <p>{{ rango.descripcion }}</p>
-          </div>
-        </div>
-        <div class="paso-footer">
-          <p-button label="← Atrás" [text]="true" severity="secondary" (click)="anteriorPaso()"></p-button>
-          <p-button label="Ver resultados →" (click)="verResultados()" [disabled]="!rangoSeleccionado"></p-button>
-        </div>
-      </div>
-
-      <!-- PASO 4 - RESULTADOS -->
-      <div *ngIf="paso === 4" class="paso-container">
-        <h2>🎯 Productos recomendados para ti</h2>
-        <p>Según tu selección: 
-          <strong>{{ categoriaSeleccionada === 'pc' ? 'PC' : 'Laptop' }}</strong> · 
-          <strong>{{ usoSeleccionado }}</strong> · 
-          <strong>{{ rangoNombre }}</strong>
-        </p>
-
-        <div *ngIf="productosFiltrados.length === 0" class="sin-resultados">
-          <p>😔 No encontramos productos con esos criterios.</p>
-          <p-button label="Ver todos los productos" (click)="irAProductos()"></p-button>
-        </div>
-
-        <div class="productos-grid">
-          <div *ngFor="let product of productosFiltrados" class="product-card">
-            <div class="stock-badge" [ngClass]="{
-              'sin-stock': product.stock === 0,
-              'poco-stock': product.stock > 0 && product.stock < 5,
-              'en-stock': product.stock >= 5
-            }">
-              {{ product.stock === 0 ? 'Sin stock' : product.stock < 5 ? 'Últimas unidades' : 'En stock' }}
-            </div>
-            <img [src]="product.imagen" [alt]="product.nombre" class="product-image"
-              (error)="onImageError($event)" />
-            <div class="product-info">
-              <h3>{{ product.nombre }}</h3>
-              <p>{{ product.descripcion }}</p>
-              <div class="product-footer">
-                <span class="price">S/ {{ product.precio | number:'1.0-0' }}</span>
-                <p-button label="Agregar" icon="pi pi-shopping-cart" size="small" (click)="irAProductos()"></p-button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="paso-footer" style="margin-top: 2rem">
-          <p-button label="← Volver a empezar" [text]="true" severity="secondary" (click)="reiniciar()"></p-button>
-          <p-button label="Ver catálogo completo" icon="pi pi-arrow-right" (click)="irAProductos()"></p-button>
-        </div>
-      </div>
-
+  <!-- STEPPER -->
+  <div class="stepper">
+    <div class="step" [ngClass]="{'active': paso >= 1, 'done': paso > 1}">
+      <span class="step-number">
+        <i *ngIf="paso > 1" class="pi pi-check"></i>
+        <span *ngIf="paso <= 1">1</span>
+      </span>
+      <span class="step-label">Categoría</span>
     </div>
+    <div class="step-line" [ngClass]="{'active': paso > 1}"></div>
+    <div class="step" [ngClass]="{'active': paso >= 2, 'done': paso > 2}">
+      <span class="step-number">
+        <i *ngIf="paso > 2" class="pi pi-check"></i>
+        <span *ngIf="paso <= 2">2</span>
+      </span>
+      <span class="step-label">Uso</span>
+    </div>
+    <div class="step-line" [ngClass]="{'active': paso > 2}"></div>
+    <div class="step" [ngClass]="{'active': paso >= 3, 'done': paso > 3}">
+      <span class="step-number">
+        <i *ngIf="paso > 3" class="pi pi-check"></i>
+        <span *ngIf="paso <= 3">3</span>
+      </span>
+      <span class="step-label">Presupuesto</span>
+    </div>
+    <div class="step-line" [ngClass]="{'active': paso > 3}"></div>
+    <div class="step" [ngClass]="{'active': paso >= 4}">
+      <span class="step-number">4</span>
+      <span class="step-label">Resultado</span>
+    </div>
+  </div>
+
+  <!-- PASO 1 - CATEGORÍA -->
+  <div *ngIf="paso === 1" class="paso-container">
+    <span class="paso-badge">Paso 1 de 3</span>
+    <h2>¿Qué estás buscando?</h2>
+    <p>Selecciona la categoría y te ayudamos a encontrar el ideal.</p>
+    <div class="opciones-grid">
+      <div class="opcion-card"
+        [ngClass]="{'selected': categoriaSeleccionada === 'pc'}"
+        (click)="seleccionarCategoria('pc')">
+        <div class="opcion-icon"><i class="pi pi-desktop"></i></div>
+        <h3>PC de Escritorio</h3>
+        <p>Mayor potencia, fácil de actualizar y mejor rendimiento por precio.</p>
+        <div class="opcion-tags">
+          <span class="otag">Alto rendimiento</span>
+          <span class="otag">Actualizable</span>
+        </div>
+      </div>
+      <div class="opcion-card"
+        [ngClass]="{'selected': categoriaSeleccionada === 'Laptop'}"
+        (click)="seleccionarCategoria('Laptop')">
+        <div class="opcion-icon"><i class="pi pi-tablet"></i></div>
+        <h3>Laptop</h3>
+        <p>Portátil, práctica y perfecta para trabajar desde cualquier lugar.</p>
+        <div class="opcion-tags">
+          <span class="otag">Portátil</span>
+          <span class="otag">Versátil</span>
+        </div>
+      </div>
+    </div>
+    <div class="paso-footer">
+      <p-button label="Volver al inicio" icon="pi pi-arrow-left" [text]="true"
+                severity="secondary" (click)="irAHome()"></p-button>
+      <p-button label="Continuar" icon="pi pi-arrow-right" iconPos="right"
+                (click)="siguientePaso()" [disabled]="!categoriaSeleccionada"></p-button>
+    </div>
+  </div>
+
+  <!-- PASO 2 - USO -->
+  <div *ngIf="paso === 2" class="paso-container">
+    <span class="paso-badge">Paso 2 de 3</span>
+    <span class="tipo-badge">
+      <i class="pi" [ngClass]="categoriaSeleccionada === 'pc' ? 'pi-desktop' : 'pi-tablet'"></i>
+      {{ categoriaSeleccionada === 'pc' ? 'PC' : 'Laptop' }} seleccionado
+    </span>
+    <h2>¿Qué tipo de uso le darás al equipo?</h2>
+    <p>Elige tu uso principal y ajustamos las recomendaciones.</p>
+    <div class="opciones-grid">
+      <div class="opcion-card" *ngFor="let uso of usos"
+        [ngClass]="{'selected': usoSeleccionado === uso.valor}"
+        (click)="seleccionarUso(uso.valor)">
+        <div class="opcion-icon"><i class="pi" [ngClass]="uso.icon"></i></div>
+        <h3>{{ uso.nombre }}</h3>
+        <p>{{ uso.descripcion }}</p>
+        <div class="opcion-tags">
+          <span class="otag" *ngFor="let tag of uso.tags">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="paso-footer">
+      <p-button label="Atrás" icon="pi pi-arrow-left" [text]="true"
+                severity="secondary" (click)="anteriorPaso()"></p-button>
+      <p-button label="Continuar" icon="pi pi-arrow-right" iconPos="right"
+                (click)="siguientePaso()" [disabled]="!usoSeleccionado"></p-button>
+    </div>
+  </div>
+
+  <!-- PASO 3 - PRESUPUESTO -->
+  <div *ngIf="paso === 3" class="paso-container">
+    <span class="paso-badge">Paso 3 de 3</span>
+    <h2>¿Cuál es tu presupuesto?</h2>
+    <p>Te mostramos productos dentro de tu rango de precio.</p>
+    <div class="opciones-grid">
+      <div class="opcion-card" *ngFor="let rango of rangos"
+        [ngClass]="{'selected': rangoSeleccionado === rango.valor}"
+        (click)="seleccionarRango(rango.valor)">
+        <div class="opcion-icon"><i class="pi" [ngClass]="rango.icon"></i></div>
+        <h3>{{ rango.nombre }}</h3>
+        <p>{{ rango.descripcion }}</p>
+      </div>
+    </div>
+    <div class="paso-footer">
+      <p-button label="Atrás" icon="pi pi-arrow-left" [text]="true"
+                severity="secondary" (click)="anteriorPaso()"></p-button>
+      <p-button label="Ver resultados" icon="pi pi-arrow-right" iconPos="right"
+                (click)="verResultados()" [disabled]="!rangoSeleccionado"></p-button>
+    </div>
+  </div>
+
+  <!-- PASO 4 - RESULTADOS -->
+  <div *ngIf="paso === 4" class="paso-container">
+    <div class="resultado-header">
+      <i class="pi pi-star-fill resultado-icon"></i>
+      <h2>Productos recomendados para ti</h2>
+      <p>Según tu selección:
+        <strong>{{ categoriaSeleccionada === 'pc' ? 'PC' : 'Laptop' }}</strong> ·
+        <strong>{{ usoSeleccionado }}</strong> ·
+        <strong>{{ rangoNombre }}</strong>
+      </p>
+    </div>
+
+    <div *ngIf="productosFiltrados.length === 0" class="sin-resultados">
+      <i class="pi pi-inbox sin-resultados-icon"></i>
+      <p>No encontramos productos con esos criterios.</p>
+      <p-button label="Ver todos los productos" icon="pi pi-arrow-right" iconPos="right"
+                (click)="irAProductos()"></p-button>
+    </div>
+
+    <div class="productos-grid">
+      <div *ngFor="let product of productosFiltrados" class="product-card">
+        <div class="stock-badge" [ngClass]="{
+          'sin-stock': product.stock === 0,
+          'poco-stock': product.stock > 0 && product.stock < 5,
+          'en-stock': product.stock >= 5
+        }">
+          <i class="pi" [ngClass]="{
+            'pi-times-circle': product.stock === 0,
+            'pi-exclamation-triangle': product.stock > 0 && product.stock < 5,
+            'pi-check-circle': product.stock >= 5
+          }"></i>
+          {{ product.stock === 0 ? 'Sin stock' : product.stock < 5 ? 'Últimas unidades' : 'En stock' }}
+        </div>
+        <img [src]="product.imagen" [alt]="product.nombre" class="product-image"
+          (error)="onImageError($event)" />
+        <div class="product-info">
+          <h3>{{ product.nombre }}</h3>
+          <p>{{ product.descripcion }}</p>
+          <div class="product-footer">
+            <span class="price">S/ {{ product.precio | number:'1.0-0' }}</span>
+            <p-button label="Ver producto" icon="pi pi-eye" size="small"
+          (click)="verProducto(product.id)"></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paso-footer" style="margin-top: 2rem">
+      <p-button label="Volver a empezar" icon="pi pi-refresh" [text]="true"
+                severity="secondary" (click)="reiniciar()"></p-button>
+    </div>
+  </div>
+
+</div>

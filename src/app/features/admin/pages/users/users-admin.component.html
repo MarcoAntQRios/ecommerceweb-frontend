@@ -1,57 +1,80 @@
- <div class="users-admin">
-      <h2>Gestión de Usuarios</h2>
+<div class="users-admin">
+  <h2>👥 Gestión de Usuarios</h2>
 
-      <p-table [value]="usuarios" [rows]="10" [paginator]="true" responsiveLayout="scroll">
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
-            <th pSortableColumn="apellido">Apellido <p-sortIcon field="apellido"></p-sortIcon></th>
-            <th pSortableColumn="correo">Correo <p-sortIcon field="correo"></p-sortIcon></th>
-            <th pSortableColumn="telefono">Teléfono <p-sortIcon field="telefono"></p-sortIcon></th>
-            <th pSortableColumn="rolNombre">Rol <p-sortIcon field="rolNombre"></p-sortIcon></th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-usuario>
-          <tr>
-            <td>{{ usuario.id }}</td>
-            <td>{{ usuario.nombre }}</td>
-            <td>{{ usuario.apellido }}</td>
-            <td>{{ usuario.correo }}</td>
-            <td>{{ usuario.telefono }}</td>
-            <td>{{ usuario.rolNombre }}</td>
-            <td>
-              <p-button icon="pi pi-eye" [rounded]="true" [text]="true" (click)="verUsuario(usuario)"></p-button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+  <p-table [value]="usuarios" [rows]="10" [paginator]="true" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+        <th pSortableColumn="apellido">Apellido <p-sortIcon field="apellido"></p-sortIcon></th>
+        <th pSortableColumn="correo">Correo <p-sortIcon field="correo"></p-sortIcon></th>
+        <th pSortableColumn="telefono">Teléfono <p-sortIcon field="telefono"></p-sortIcon></th>
+        <th pSortableColumn="rolNombre">Rol <p-sortIcon field="rolNombre"></p-sortIcon></th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-usuario>
+      <tr>
+        <td>{{ usuario.id }}</td>
+        <td>
+          <div class="usuario-nombre">
+            <div class="avatar" [ngClass]="usuario.rolNombre === 'ADMIN' ? 'avatar-admin' : 'avatar-cliente'">
+              {{ usuario.nombre[0].toUpperCase() }}
+            </div>
+            {{ usuario.nombre }}
+          </div>
+        </td>
+        <td>{{ usuario.apellido }}</td>
+        <td>{{ usuario.correo }}</td>
+        <td>{{ usuario.telefono ?? '—' }}</td>
+        <td>
+          <span class="rol-badge" [ngClass]="usuario.rolNombre === 'ADMIN' ? 'rol-admin' : 'rol-cliente'">
+            <i [class]="usuario.rolNombre === 'ADMIN' ? 'pi pi-shield' : 'pi pi-user'"></i>
+            {{ usuario.rolNombre }}
+          </span>
+        </td>
+        <td>
+          <p-button icon="pi pi-eye" [rounded]="true" [text]="true" 
+                    severity="info" (click)="verUsuario(usuario)">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 
-      <!-- Dialog Ver Usuario -->
-      <p-dialog [(visible)]="displayDialog" header="Detalle de Usuario" [modal]="true" [style]="{width: '40vw'}">
-        <div class="form-group">
-          <label>Nombre:</label>
-          <input type="text" [ngModel]="selectedUsuario.nombre" class="form-control" readonly />
-        </div>
-        <div class="form-group">
-          <label>Apellido:</label>
-          <input type="text" [ngModel]="selectedUsuario.apellido" class="form-control" readonly />
-        </div>
-        <div class="form-group">
-          <label>Correo:</label>
-          <input type="email" [ngModel]="selectedUsuario.correo" class="form-control" readonly />
-        </div>
-        <div class="form-group">
-          <label>Teléfono:</label>
-          <input type="text" [ngModel]="selectedUsuario.telefono" class="form-control" readonly />
-        </div>
-        <div class="form-group">
-          <label>Dirección:</label>
-          <input type="text" [ngModel]="selectedUsuario.direccion" class="form-control" readonly />
-        </div>
-        <div class="dialog-footer">
-          <p-button label="Cerrar" icon="pi pi-times" (click)="displayDialog = false"></p-button>
-        </div>
-      </p-dialog>
+  <!-- Dialog Ver Usuario -->
+  <p-dialog [(visible)]="displayDialog" header="Detalle de Usuario" 
+            [modal]="true" [style]="{width: '40vw'}">
+    <div class="detalle-header">
+      <div class="detalle-avatar" 
+           [ngClass]="selectedUsuario.rolId === 1 ? 'avatar-admin' : 'avatar-cliente'">
+        {{ selectedUsuario.nombre?.[0]?.toUpperCase() }}
+      </div>
+      <div class="detalle-info">
+        <h3>{{ selectedUsuario.nombre }} {{ selectedUsuario.apellido }}</h3>
+        <span class="rol-badge" 
+              [ngClass]="selectedUsuario.rolId === 1 ? 'rol-admin' : 'rol-cliente'">
+          <i [class]="selectedUsuario.rolId === 1 ? 'pi pi-shield' : 'pi pi-user'"></i>
+          {{ selectedUsuario.rolId === 1 ? 'ADMIN' : 'CLIENTE' }}
+        </span>
+      </div>
     </div>
+
+    <div class="detalle-grid">
+      <div class="detalle-item">
+        <span class="detalle-label"><i class="pi pi-envelope"></i> Correo</span>
+        <span class="detalle-value">{{ selectedUsuario.correo }}</span>
+      </div>
+      <div class="detalle-item">
+        <span class="detalle-label"><i class="pi pi-phone"></i> Teléfono</span>
+        <span class="detalle-value">{{ selectedUsuario.telefono || '—' }}</span>
+      </div>
+      <div class="detalle-item full-width">
+        <span class="detalle-label"><i class="pi pi-map-marker"></i> Dirección</span>
+        <span class="detalle-value">{{ selectedUsuario.direccion || '—' }}</span>
+      </div>
+    </div>
+
+   
+  </p-dialog>
+</div>

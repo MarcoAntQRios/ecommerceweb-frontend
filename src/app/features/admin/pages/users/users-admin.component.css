@@ -7,24 +7,113 @@
   margin-bottom: 1.5rem;
 }
 
-.form-group {
+/* Avatar en listado */
+.usuario-nombre {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.avatar-admin { background: #7c3aed; }
+.avatar-cliente { background: #0ea5e9; }
+
+/* Badge de rol */
+.rol-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.rol-admin {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.rol-cliente {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* Detalle dialog */
+.detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.detalle-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.detalle-info h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #555;
+.full-width {
+  grid-column: 1 / -1;
 }
 
-.form-control {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+.detalle-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
   background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.detalle-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.detalle-value {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
 }
 
 .dialog-footer {
